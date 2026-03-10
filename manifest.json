@@ -1,9 +1,9 @@
 ﻿{
-  "name": "Delicia Baiana PDV",
-  "short_name": "PDV Baiana",
+  "name": "Delicias Baiana PDV",
+  "short_name": "PDV Delpicias",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#fff8ec",
+  "background_color": "#f2cb5d",
   "theme_color": "#770001",
   "description": "App de gestao financeira e PDV para pequenos negocios de alimentacao",
   "icons": [
