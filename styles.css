@@ -309,18 +309,6 @@ td {
     grid-template-columns: repeat(2, minmax(120px, 1fr));
   }
 }
-.menu-btn {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  font-size: 26px;
-  background: #770001;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  z-index: 1002;
-}
 
 /* BOTÃO MENU */
 
@@ -371,10 +359,6 @@ td {
   z-index: 1001;
 }
 
-.side-menu.open {
-  right: 0;
-}
-
 /* CABEÇALHO */
 
 .menu-header {
@@ -393,19 +377,3 @@ td {
   font-size: 20px;
   cursor: pointer;
 }
-
-/* LINKS */
-
-.side-menu a {
-  display: block;
-  padding: 16px 20px;
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  border-bottom: 1px solid #eee;
-}
-
-.side-menu a:hover {
-  background: #f5f5f5;
-}
-
