@@ -1183,9 +1183,9 @@ function init(){
     menuOverlay.classList.remove("active");
   }
 
-  menuBtn.addEventListener("click", abrirMenu);
-  closeMenu.addEventListener("click", fecharMenu);
-  menuOverlay.addEventListener("click", fecharMenu);
+if(menuBtn) menuBtn.addEventListener("click", abrirMenu);
+if(closeMenu) closeMenu.addEventListener("click", fecharMenu);
+if(menuOverlay) menuOverlay.addEventListener("click", fecharMenu);
 
   bindAuth();
   bindNavigation();
