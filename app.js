@@ -1144,17 +1144,23 @@ function init() {
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js")
-  .then(function() {
+  .then(function () {
     console.log("Service Worker registrado");
+  })
+  .catch(function (err) {
+    console.log("Erro ao registrar Service Worker:", err);
+  });
+}
 
 const menuBtn = document.getElementById("menuBtn");
 const sideMenu = document.getElementById("sideMenu");
 
-menuBtn.addEventListener("click", () => {
-  sideMenu.classList.toggle("open");
-});
+if (menuBtn && sideMenu) {
+  menuBtn.addEventListener("click", () => {
+    sideMenu.classList.toggle("open");
+  });
 }
-}
+
 init();
 
 
