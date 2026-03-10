@@ -988,6 +988,35 @@ function runBackup(reason = "automatico") {
   return snapshot;
 }
 
+// BACKUP NA NUVEM
+async function backupCloud() {
+
+ const data = JSON.parse(localStorage.getItem("pdv_data"));
+
+ await setDoc(doc(db, "backup", "principal"), {
+   data: data,
+   updated: new Date()
+ });
+
+ alert("Backup na nuvem realizado!");
+
+}
+
+// RESTAURAR BACKUP
+async function restoreCloud() {
+
+ const docSnap = await getDoc(doc(db, "backup", "principal"));
+
+ if (docSnap.exists()) {
+
+   localStorage.setItem("pdv_data", JSON.stringify(docSnap.data().data));
+
+   alert("Backup restaurado!");
+   location.reload();
+
+ }
+
+}
 function bindSettings() {
   document.getElementById("save-settings").addEventListener("click", () => {
     state.settings.businessName = document.getElementById("settings-business-name").value.trim() || "Delicia Baiana";
