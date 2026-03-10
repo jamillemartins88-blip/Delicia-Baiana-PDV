@@ -11,6 +11,18 @@
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
+
+  <!-- Botão abrir menu -->
+<button id="menuBtn" class="menu-btn">☰</button>
+
+<!-- Menu lateral -->
+<div id="sideMenu" class="side-menu">
+  <a href="#" onclick="showPage('pdv')">PDV</a>
+  <a href="#" onclick="showPage('produtos')">Produtos</a>
+  <a href="#" onclick="showPage('financeiro')">Financeiro</a>
+  <a href="#" onclick="showPage('relatorios')">Relatórios</a>
+  <a href="#" onclick="logout()">Sair</a>
+</div>
   <div id="login-screen" class="login-screen">
     <form id="login-form" class="card login-card">
       <h1>Delicia Baiana</h1>
