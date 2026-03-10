@@ -1146,7 +1146,13 @@ if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js")
   .then(function() {
     console.log("Service Worker registrado");
-  });
+
+const menuBtn = document.getElementById("menuBtn");
+const sideMenu = document.getElementById("sideMenu");
+
+menuBtn.addEventListener("click", () => {
+  sideMenu.classList.toggle("open");
+});
 }
 }
 init();
