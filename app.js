@@ -237,27 +237,6 @@ function bindAuth() {
   }
 
 }
-function bindNavigation() {
-  const menu = document.getElementById("menu");
-  menu.addEventListener("click", (e) => {
-    const btn = e.target.closest("button[data-view]");
-    if (!btn) return;
-    const view = btn.dataset.view;
-    document.querySelectorAll(".menu-item").forEach((item) => item.classList.remove("active"));
-    btn.classList.add("active");
-    document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
-    document.getElementById(`view-${view}`).classList.add("active");
-    document.getElementById("page-title").textContent = btn.textContent;
-
-    if (view === "dashboard") renderDashboard();
-    if (view === "pdv") renderPDV();
-    if (view === "cashflow") renderCashflow();
-    if (view === "products") renderProducts();
-    if (view === "reports") renderReports();
-    if (view === "closing") renderClosing();
-    if (view === "settings") renderSettings();
-  });
-}
 
 function bindPDV() {
   document.getElementById("pdv-product").addEventListener("change", (e) => {
@@ -1188,7 +1167,6 @@ if(closeMenu) closeMenu.addEventListener("click", fecharMenu);
 if(menuOverlay) menuOverlay.addEventListener("click", fecharMenu);
 
   bindAuth();
-  bindNavigation();
   bindPDV();
   bindCashflow();
   bindProducts();
