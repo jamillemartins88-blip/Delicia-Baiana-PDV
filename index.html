@@ -1,0 +1,443 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#16a34a">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#770001">
+  <title>Delicia Baiana PDV</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div id="login-screen" class="login-screen">
+    <form id="login-form" class="card login-card">
+      <h1>Delicia Baiana</h1>
+      <p>Gestao Financeira e PDV</p>
+      <label>Usuario</label>
+      <input id="login-username" type="text" required>
+      <label>Senha</label>
+      <input id="login-password" type="password" required>
+      <button type="submit" class="btn btn-primary">Entrar</button>
+      <p id="login-error" class="error-text"></p>
+    </form>
+  </div>
+
+  <div id="app" class="app hidden">
+    <aside class="sidebar">
+      <div class="brand">
+        <h2>Delicia Baiana</h2>
+      </div>
+      <nav id="menu">
+        <button data-view="dashboard" class="menu-item active">Dashboard</button>
+        <button data-view="pdv" class="menu-item">Nova Venda (PDV)</button>
+        <button data-view="cashflow" class="menu-item">Fluxo de Caixa</button>
+        <button data-view="products" class="menu-item">Produtos</button>
+        <button data-view="reports" class="menu-item">Relatorios</button>
+        <button data-view="closing" class="menu-item">Fechamento de Caixa</button>
+        <button data-view="settings" class="menu-item">Configuracoes</button>
+      </nav>
+      <button id="logout-btn" class="btn btn-secondary">Sair</button>
+    </aside>
+
+    <main class="content">
+      <header class="topbar card">
+        <div>
+          <h3 id="page-title">Dashboard</h3>
+          <small id="datetime-now"></small>
+        </div>
+        <div class="top-info">
+          <span id="online-status" class="pill">Offline</span>
+          <span id="current-user" class="pill"></span>
+        </div>
+      </header>
+
+      <section id="view-dashboard" class="view active">
+        <div class="metrics-grid">
+          <article class="metric card">
+            <h4>Faturamento do Dia</h4>
+            <p id="metric-day">R$ 0,00</p>
+          </article>
+          <article class="metric card">
+            <h4>Faturamento da Semana</h4>
+            <p id="metric-week">R$ 0,00</p>
+          </article>
+          <article class="metric card">
+            <h4>Faturamento do Mes</h4>
+            <p id="metric-month">R$ 0,00</p>
+          </article>
+          <article class="metric card">
+            <h4>Lucro Estimado</h4>
+            <p id="metric-profit">R$ 0,00</p>
+          </article>
+          <article class="metric card">
+            <h4>Despesas Totais</h4>
+            <p id="metric-expenses">R$ 0,00</p>
+          </article>
+        </div>
+        <div class="charts-grid">
+          <article class="card">
+            <h4>Vendas por Dia (7 dias)</h4>
+            <canvas id="sales-bar-chart" width="500" height="220"></canvas>
+          </article>
+          <article class="card">
+            <h4>Formas de Pagamento</h4>
+            <canvas id="payment-pie-chart" width="500" height="220"></canvas>
+          </article>
+          <article class="card">
+            <h4>Evolucao do Faturamento (30 dias)</h4>
+            <canvas id="revenue-line-chart" width="500" height="220"></canvas>
+          </article>
+        </div>
+      </section>
+
+      <section id="view-pdv" class="view">
+        <div class="pdv-layout">
+          <article class="card">
+            <h4>Adicionar Itens</h4>
+            <div class="form-row">
+              <label>Produto</label>
+              <select id="pdv-product"></select>
+            </div>
+            <div class="form-grid">
+              <div class="form-row">
+                <label>Quantidade</label>
+                <input id="pdv-qty" type="number" min="1" step="1" value="1">
+              </div>
+              <div class="form-row">
+                <label>Valor unitario (R$)</label>
+                <input id="pdv-unit-price" type="number" min="0" step="0.01">
+              </div>
+            </div>
+            <button id="pdv-add-item" class="btn btn-primary">Adicionar produto</button>
+            <div id="quick-products" class="quick-products"></div>
+          </article>
+          <article class="card">
+            <h4>Carrinho</h4>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Produto</th>
+                    <th>Qtd</th>
+                    <th>Unit.</th>
+                    <th>Total</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="pdv-cart-body"></tbody>
+              </table>
+            </div>
+            <div class="summary">
+              <p>Subtotal: <strong id="pdv-subtotal">R$ 0,00</strong></p>
+              <p>Taxa de entrega: <strong id="pdv-delivery-fee">R$ 0,00</strong></p>
+              <p>Total: <strong id="pdv-total">R$ 0,00</strong></p>
+            </div>
+            <div class="form-grid">
+              <div class="form-row">
+                <label>Forma de pagamento</label>
+                <select id="pdv-payment">
+                  <option>Dinheiro</option>
+                  <option>PIX</option>
+                  <option>Cartao de debito</option>
+                  <option>Cartao de credito</option>
+                  <option>Outros</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label>Forma de entrega</label>
+                <select id="pdv-delivery">
+                  <option>Delivery</option>
+                  <option>Retirada</option>
+                </select>
+              </div>
+              <div id="pdv-delivery-zone-row" class="form-row">
+                <label>Regiao da entrega</label>
+                <select id="pdv-delivery-zone">
+                  <option>Cidade</option>
+                  <option>Outros</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-row">
+                <label>Valor recebido (R$)</label>
+                <input id="pdv-cash-received" type="number" min="0" step="0.01">
+              </div>
+              <div class="form-row">
+                <label>Troco</label>
+                <input id="pdv-change" type="text" readonly>
+              </div>
+            </div>
+            <button id="pdv-finish-sale" class="btn btn-accent">Finalizar venda</button>
+          </article>
+        </div>
+      </section>
+
+      <section id="view-cashflow" class="view">
+        <div class="two-cols">
+          <article class="card">
+            <h4>Novo Lancamento</h4>
+            <form id="cashflow-form">
+              <div class="form-row">
+                <label>Tipo</label>
+                <select id="cash-type" required>
+                  <option value="entrada">Entrada</option>
+                  <option value="saida">Saida</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label>Descricao</label>
+                <input id="cash-description" type="text" required>
+              </div>
+              <div class="form-grid">
+                <div class="form-row">
+                  <label>Categoria</label>
+                  <select id="cash-category" required>
+                    <option>vendas</option>
+                    <option>outras receitas</option>
+                    <option>compras</option>
+                    <option>despesas</option>
+                    <option>fornecedores</option>
+                    <option>custos operacionais</option>
+                  </select>
+                </div>
+                <div class="form-row">
+                  <label>Valor</label>
+                  <input id="cash-value" type="number" min="0" step="0.01" required>
+                </div>
+              </div>
+              <div class="form-grid">
+                <div class="form-row">
+                  <label>Data</label>
+                  <input id="cash-date" type="date" required>
+                </div>
+                <div class="form-row">
+                  <label>Forma de pagamento</label>
+                  <select id="cash-payment" required>
+                    <option>Dinheiro</option>
+                    <option>PIX</option>
+                    <option>Cartao de debito</option>
+                    <option>Cartao de credito</option>
+                    <option>Outros</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <label>Observacoes</label>
+                <textarea id="cash-notes" rows="3"></textarea>
+              </div>
+              <button class="btn btn-primary" type="submit">Salvar lancamento</button>
+            </form>
+          </article>
+          <article class="card">
+            <h4>Historico de Lancamentos</h4>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Categoria</th>
+                    <th>Descricao</th>
+                    <th>Valor</th>
+                  </tr>
+                </thead>
+                <tbody id="cashflow-body"></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="view-products" class="view">
+        <div class="two-cols">
+          <article class="card">
+            <h4>Cadastro de Produto</h4>
+            <form id="product-form">
+              <input id="product-id" type="hidden">
+              <div class="form-row">
+                <label>Nome do produto</label>
+                <input id="product-name" type="text" required>
+              </div>
+              <div class="form-row">
+                <label>Categoria</label>
+                <input id="product-category" type="text" required>
+              </div>
+              <div class="form-grid">
+                <div class="form-row">
+                  <label>Preco</label>
+                  <input id="product-price" type="number" min="0" step="0.01" required>
+                </div>
+                <div class="form-row">
+                  <label>Custo</label>
+                  <input id="product-cost" type="number" min="0" step="0.01" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <label>Margem de lucro</label>
+                <input id="product-margin" type="text" readonly>
+              </div>
+              <div class="form-row">
+                <label>Foto do produto</label>
+                <input id="product-photo" type="file" accept="image/*">
+                <img id="product-preview" class="product-preview hidden" alt="Preview">
+              </div>
+              <button class="btn btn-primary" type="submit">Salvar produto</button>
+            </form>
+          </article>
+          <article class="card">
+            <h4>Lista de Produtos</h4>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Foto</th>
+                    <th>Nome</th>
+                    <th>Categoria</th>
+                    <th>Preco</th>
+                    <th>Custo</th>
+                    <th>Margem</th>
+                    <th>Acoes</th>
+                  </tr>
+                </thead>
+                <tbody id="products-body"></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="view-reports" class="view">
+        <article class="card">
+          <h4>Filtros</h4>
+          <div class="form-grid">
+            <div class="form-row">
+              <label>Data inicial</label>
+              <input id="report-start" type="date">
+            </div>
+            <div class="form-row">
+              <label>Data final</label>
+              <input id="report-end" type="date">
+            </div>
+          </div>
+          <div class="actions">
+            <button id="report-generate" class="btn btn-primary">Gerar relatorios</button>
+            <button id="report-export-excel" class="btn btn-secondary">Exportar Excel</button>
+            <button id="report-export-pdf" class="btn btn-secondary">Exportar PDF</button>
+          </div>
+        </article>
+        <article class="card">
+          <h4>Resumo de Relatorios</h4>
+          <div id="report-output"></div>
+        </article>
+      </section>
+
+      <section id="view-closing" class="view">
+        <article class="card">
+          <h4>Fechamento de Caixa Diario</h4>
+          <p>Data: <strong id="closing-date"></strong></p>
+          <div class="metrics-grid">
+            <article class="metric card">
+              <h4>Total vendido</h4>
+              <p id="closing-sold">R$ 0,00</p>
+            </article>
+            <article class="metric card">
+              <h4>Total em dinheiro</h4>
+              <p id="closing-cash">R$ 0,00</p>
+            </article>
+            <article class="metric card">
+              <h4>Total em cartao</h4>
+              <p id="closing-card">R$ 0,00</p>
+            </article>
+            <article class="metric card">
+              <h4>Total em PIX</h4>
+              <p id="closing-pix">R$ 0,00</p>
+            </article>
+            <article class="metric card">
+              <h4>Total de despesas</h4>
+              <p id="closing-expenses">R$ 0,00</p>
+            </article>
+            <article class="metric card">
+              <h4>Lucro do dia</h4>
+              <p id="closing-profit">R$ 0,00</p>
+            </article>
+          </div>
+          <button id="closing-print" class="btn btn-accent">Imprimir fechamento</button>
+        </article>
+      </section>
+
+      <section id="view-settings" class="view">
+        <div class="two-cols">
+          <article class="card">
+            <h4>Configuracoes Gerais</h4>
+            <div class="form-row">
+              <label>Nome do negocio</label>
+              <input id="settings-business-name" type="text">
+            </div>
+            <div class="form-row">
+              <label>Tema</label>
+              <select id="settings-theme">
+                <option value="light">Claro</option>
+                <option value="dark">Escuro</option>
+              </select>
+            </div>
+            <button id="save-settings" class="btn btn-primary">Salvar configuracoes</button>
+            <hr>
+            <h5>Backup</h5>
+            <div class="actions">
+              <button id="backup-now" class="btn btn-secondary">Gerar backup agora</button>
+              <button id="download-backup" class="btn btn-secondary">Baixar backup</button>
+              <label class="btn btn-secondary">
+                Restaurar backup
+                <input id="restore-backup" type="file" accept=".json" class="hidden">
+              </label>
+            </div>
+            <hr>
+            <h5>Sincronizacao em nuvem</h5>
+            <p>Sincronizacao simplificada entre dispositivos via espelho de dados.</p>
+            <div class="actions">
+              <button id="cloud-sync-up" class="btn btn-secondary">Enviar para nuvem</button>
+              <button id="cloud-sync-down" class="btn btn-secondary">Baixar da nuvem</button>
+            </div>
+          </article>
+          <article class="card">
+            <h4>Usuarios</h4>
+            <form id="user-form">
+              <div class="form-row">
+                <label>Nome</label>
+                <input id="user-name" type="text" required>
+              </div>
+              <div class="form-row">
+                <label>Usuario</label>
+                <input id="user-username" type="text" required>
+              </div>
+              <div class="form-row">
+                <label>Senha</label>
+                <input id="user-password" type="password" required>
+              </div>
+              <button class="btn btn-primary" type="submit">Adicionar usuario</button>
+            </form>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Usuario</th>
+                  </tr>
+                </thead>
+                <tbody id="users-body"></tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
+
+
