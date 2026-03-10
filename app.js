@@ -1191,24 +1191,9 @@ function fecharMenu(){
 menuBtn.addEventListener("click", abrirMenu);
 closeMenu.addEventListener("click", fecharMenu);
 menuOverlay.addEventListener("click", fecharMenu);
-  });
 
 }
 
-if (closeMenu) {
-  closeMenu.addEventListener("click", () => {
-    sideMenu.classList.remove("open");
-    menuOverlay.classList.remove("active");
-  });
-}
-
-if (menuOverlay) {
-  menuOverlay.addEventListener("click", () => {
-    sideMenu.classList.remove("open");
-    menuOverlay.classList.remove("active");
-  });
-}
-  
 }
   
 init();
