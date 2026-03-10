@@ -1,7 +1,7 @@
 ﻿{
   "name": "Delicias Baiana PDV",
-  "short_name": "PDV Delpicias",
-  "start_url": "./index.html",
+  "short_name": "PDV Delicias",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#f2cb5d",
   "theme_color": "#770001",
