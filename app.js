@@ -1193,8 +1193,6 @@ closeMenu.addEventListener("click", fecharMenu);
 menuOverlay.addEventListener("click", fecharMenu);
 
 }
-
-}
   
 init();
 
