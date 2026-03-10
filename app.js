@@ -1193,7 +1193,29 @@ closeMenu.addEventListener("click", fecharMenu);
 menuOverlay.addEventListener("click", fecharMenu);
 
 }
-  
+ function showPage(page){
+
+  // esconder todas as telas
+  document.querySelectorAll(".view").forEach(v=>{
+    v.classList.remove("active");
+  });
+
+  // mostrar tela selecionada
+  const view = document.getElementById("view-" + page);
+  if(view) view.classList.add("active");
+
+  // atualizar título
+  const title = document.getElementById("page-title");
+  if(title) title.textContent = page;
+
+  // fechar menu
+  const sideMenu = document.getElementById("sideMenu");
+  const menuOverlay = document.getElementById("menuOverlay");
+
+  sideMenu.classList.remove("active");
+  menuOverlay.classList.remove("active");
+
+} 
 init();
 
 
