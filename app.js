@@ -163,7 +163,9 @@ function setTheme(theme) {
 
 function updateOnlineStatus() {
   const status = document.getElementById("online-status");
-  status.textContent = navigator.onLine ? "Online" : "Offline";
+if (!status) return;
+
+status.textContent = navigator.onLine ? "Online" : "Offline";
   status.style.background = navigator.onLine ? "#a8f0c9" : "#f8e2a0";
 }
 
@@ -1144,9 +1146,17 @@ const menuBtn = document.getElementById("menuBtn");
 const sideMenu = document.getElementById("sideMenu");
 
 if (menuBtn && sideMenu) {
+
   menuBtn.addEventListener("click", () => {
     sideMenu.classList.toggle("open");
   });
+
+  document.addEventListener("click", (e) => {
+    if (!sideMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+      sideMenu.classList.remove("open");
+    }
+  });
+
 }
   
 }
