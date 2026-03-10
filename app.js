@@ -4,7 +4,6 @@ const CLOUD_KEY = "delicia_baiana_cloud_mirror";
 
 const fmt = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
-let state = loadState();
 let session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
 let pdvCart = [];
 let productPhotoData = "";
@@ -45,6 +44,7 @@ const DEFAULT_EXPENSES = [
   { description: "Anuncio Meta Ads", category: "custos operacionais", value: 130 }
 ];
 
+let state = loadState();
 function loadState() {
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) {
