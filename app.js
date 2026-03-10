@@ -1102,14 +1102,6 @@ function renderAll() {
   renderSettings();
 }
 
-function registerServiceWorker() {
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js").catch(() => {
-      // falha silenciosa para nao bloquear o uso
-    });
-  }
-}
-
 function startAutoBackup() {
   const everyMs = Math.max(Number(state.settings.autoBackupMinutes || 5), 1) * 60 * 1000;
   setInterval(() => {
