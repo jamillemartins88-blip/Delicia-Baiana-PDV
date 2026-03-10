@@ -1161,6 +1161,12 @@ if (menuBtn && sideMenu) {
   });
 }
 
+  document.addEventListener("click", (e) => {
+  if (!sideMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+    sideMenu.classList.remove("open");
+  }
+});
+  
 init();
 
 
