@@ -1144,27 +1144,26 @@ let menuOverlay;
 
 function init(){
 
-sideMenu = document.getElementById("sideMenu");
-menuOverlay = document.getElementById("menuOverlay");
+  sideMenu = document.getElementById("sideMenu");
+  menuOverlay = document.getElementById("menuOverlay");
 
-const menuBtn = document.getElementById("menuBtn");
-const closeMenu = document.getElementById("closeMenu");
+  const menuBtn = document.getElementById("menuBtn");
+  const closeMenu = document.getElementById("closeMenu");
 
-function abrirMenu(){
-  sideMenu.classList.add("active");
-  menuOverlay.classList.add("active");
-}
+  function abrirMenu(){
+    sideMenu.classList.add("active");
+    menuOverlay.classList.add("active");
+  }
 
-function fecharMenu(){
-  sideMenu.classList.remove("active");
-  menuOverlay.classList.remove("active");
-}
+  function fecharMenu(){
+    sideMenu.classList.remove("active");
+    menuOverlay.classList.remove("active");
+  }
 
-menuBtn.addEventListener("click", abrirMenu);
-closeMenu.addEventListener("click", fecharMenu);
-menuOverlay.addEventListener("click", fecharMenu);
+  menuBtn.addEventListener("click", abrirMenu);
+  closeMenu.addEventListener("click", fecharMenu);
+  menuOverlay.addEventListener("click", fecharMenu);
 
-}
   bindAuth();
   bindNavigation();
   bindPDV();
@@ -1179,8 +1178,9 @@ menuOverlay.addEventListener("click", fecharMenu);
 
   updateClock();
   updateOnlineStatus();
+
   setInterval(updateClock, 1000);
-  
+
   window.addEventListener("online", updateOnlineStatus);
   window.addEventListener("offline", updateOnlineStatus);
 
@@ -1189,32 +1189,11 @@ menuOverlay.addEventListener("click", fecharMenu);
 
   startAutoBackup();
 
-if ("serviceWorker" in navigator) {
+  if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js")
       .then(() => console.log("Service Worker registrado"))
       .catch((err) => console.log("Erro:", err));
   }
-
-// MENU LATERAL
-
-const menuBtn = document.getElementById("menuBtn");
-const closeMenu = document.getElementById("closeMenu");
-const menuOverlay = document.getElementById("menuOverlay");
-const sideMenu = document.getElementById("sideMenu");
-
-function abrirMenu(){
-  sideMenu.classList.add("active");
-  menuOverlay.classList.add("active");
-}
-
-function fecharMenu(){
-  sideMenu.classList.remove("active");
-  menuOverlay.classList.remove("active");
-}
-
-menuBtn.addEventListener("click", abrirMenu);
-closeMenu.addEventListener("click", fecharMenu);
-menuOverlay.addEventListener("click", fecharMenu);
 
 }
  function showPage(page){
