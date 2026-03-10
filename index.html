@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#770001">
-  <title>Delicia Baiana PDV</title>
+  <title>Delicias Baiana PDV</title>
   <link rel="manifest" href="./manifest.json">
   <link rel="stylesheet" href="./styles.css">
 </head>
@@ -34,7 +34,7 @@
 </div>
   <div id="login-screen" class="login-screen">
     <form id="login-form" class="card login-card">
-      <h1>Delicia Baiana</h1>
+      <h1>Delicias Baiana</h1>
       <p>Gestao Financeira e PDV</p>
       <label>Usuario</label>
       <input id="login-username" type="text" required>
@@ -406,6 +406,8 @@
             <div class="actions">
               <button id="cloud-sync-up" class="btn btn-secondary">Enviar para nuvem</button>
               <button id="cloud-sync-down" class="btn btn-secondary">Baixar da nuvem</button>
+              <<button onclick="backupCloud()" class="btn btn-accent">☁️ Backup Nuvem</button>
+              <button onclick="restoreCloud()" class="btn btn-accent">🔄 Restaurar Nuvem</button>
             </div>
           </article>
           <article class="card">
@@ -448,12 +450,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getFirestore, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "SUA_KEY",
-  authDomain: "SEU_APP.firebaseapp.com",
-  projectId: "SEU_APP",
-  storageBucket: "SEU_APP.appspot.com",
-  messagingSenderId: "XXXX",
-  appId: "XXXX"
+  apiKey: "AIzaSyDx26t161SRZD6FAk0pj2eB_1DcWBII3zQ",
+  authDomain: "delicias-baiana-pdv.firebaseapp.com",
+  projectId: "delicias-baiana-pdv",
+  storageBucket: "delicias-baiana-pdv.firebasestorage.app",
+  messagingSenderId: "692640981882",
+  appId: "1:692640981882:web:5b3a39fbc29f47735b2cc3",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -462,8 +464,9 @@ const db = getFirestore(app);
 window.db = db;
 
 </script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="./app.js"></script>
+
 </body>
 </html>
-
-
