@@ -377,6 +377,9 @@ html, body {
   height: 100%;
   overflow-x: hidden;
 }
+.side-menu {
+  overflow-y: auto;
+}
 /* CABEÇALHO */
 
 .menu-header {
@@ -433,3 +436,4 @@ button {
 .btn:active {
   transform: scale(0.97);
 }
+
