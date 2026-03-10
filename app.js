@@ -1151,7 +1151,7 @@ if (menuBtn && sideMenu) {
 
   menuBtn.addEventListener("click", () => {
     sideMenu.classList.add("open");
-    menuOverlay.classList.add("show");
+    menuOverlay.classList.add("active");
   });
 
 }
@@ -1159,14 +1159,14 @@ if (menuBtn && sideMenu) {
 if (closeMenu) {
   closeMenu.addEventListener("click", () => {
     sideMenu.classList.remove("open");
-    menuOverlay.classList.remove("show");
+    menuOverlay.classList.remove("active");
   });
 }
 
 if (menuOverlay) {
   menuOverlay.addEventListener("click", () => {
     sideMenu.classList.remove("open");
-    menuOverlay.classList.remove("show");
+    menuOverlay.classList.remove("active");
   });
 }
   
