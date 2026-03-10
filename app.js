@@ -1151,18 +1151,7 @@ const closeMenu = document.getElementById("closeMenu");
 if (menuBtn && sideMenu) {
 
   menuBtn.addEventListener("click", () => {
-    sideMenu.classList.add("open");
-    overlay.classList.add("active");
-  });
-
-  closeMenu.addEventListener("click", () => {
-    sideMenu.classList.remove("open");
-    overlay.classList.remove("active");
-  });
-
-  overlay.addEventListener("click", () => {
-    sideMenu.classList.remove("open");
-    overlay.classList.remove("active");
+    sideMenu.classList.toggle("open");
   });
 
 }
