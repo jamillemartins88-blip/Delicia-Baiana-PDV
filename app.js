@@ -1154,38 +1154,27 @@ if ("serviceWorker" in navigator) {
 
 const menuBtn = document.getElementById("menuBtn");
 const sideMenu = document.getElementById("sideMenu");
-
-if (menuBtn && sideMenu) {
-  menuBtn.addEventListener("click", () => {
-    sideMenu.classList.toggle("open");
-  });
-}
-
-  document.addEventListener("click", (e) => {
-  if (!sideMenu.contains(e.target) && !menuBtn.contains(e.target)) {
-    sideMenu.classList.remove("open");
-  }
-});
-
-  const menuBtn = document.getElementById("menuBtn");
-const sideMenu = document.getElementById("sideMenu");
 const overlay = document.getElementById("menuOverlay");
 const closeMenu = document.getElementById("closeMenu");
 
-menuBtn.addEventListener("click", () => {
-  sideMenu.classList.add("open");
-  overlay.classList.add("active");
-});
+if (menuBtn && sideMenu) {
 
-closeMenu.addEventListener("click", () => {
-  sideMenu.classList.remove("open");
-  overlay.classList.remove("active");
-});
+  menuBtn.addEventListener("click", () => {
+    sideMenu.classList.add("open");
+    overlay.classList.add("active");
+  });
 
-overlay.addEventListener("click", () => {
-  sideMenu.classList.remove("open");
-  overlay.classList.remove("active");
-});
+  closeMenu.addEventListener("click", () => {
+    sideMenu.classList.remove("open");
+    overlay.classList.remove("active");
+  });
+
+  overlay.addEventListener("click", () => {
+    sideMenu.classList.remove("open");
+    overlay.classList.remove("active");
+  });
+
+}
 init();
 
 
