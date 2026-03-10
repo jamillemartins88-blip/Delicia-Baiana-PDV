@@ -1,6 +1,6 @@
-﻿const STORAGE_KEY = "delicia_baiana_pdv_v1";
-const SESSION_KEY = "delicia_baiana_session";
-const CLOUD_KEY = "delicia_baiana_cloud_mirror";
+﻿const STORAGE_KEY = "delicias_baiana_pdv_v1";
+const SESSION_KEY = "delicias_baiana_session";
+const CLOUD_KEY = "delicias_baiana_cloud_mirror";
 
 const fmt = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
@@ -67,7 +67,7 @@ function loadState() {
     cashEntries: [],
     backups: [],
     settings: {
-      businessName: "Delicia Baiana",
+      businessName: "Delicias Baiana",
       theme: "light",
       autoBackupMinutes: 5,
       defaultExpensesImportedV1: false,
