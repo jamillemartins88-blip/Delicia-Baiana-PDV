@@ -1209,9 +1209,6 @@ menuOverlay.addEventListener("click", fecharMenu);
   if(title) title.textContent = page;
 
   // fechar menu
-  const sideMenu = document.getElementById("sideMenu");
-  const menuOverlay = document.getElementById("menuOverlay");
-
   sideMenu.classList.remove("active");
   menuOverlay.classList.remove("active");
 
