@@ -406,7 +406,7 @@
             <div class="actions">
               <button id="cloud-sync-up" class="btn btn-secondary">Enviar para nuvem</button>
               <button id="cloud-sync-down" class="btn btn-secondary">Baixar da nuvem</button>
-              <<button onclick="backupCloud()" class="btn btn-accent">☁️ Backup Nuvem</button>
+              <button onclick="backupCloud()" class="btn btn-accent">☁️ Backup Nuvem</button>
               <button onclick="restoreCloud()" class="btn btn-accent">🔄 Restaurar Nuvem</button>
             </div>
           </article>
@@ -447,8 +447,19 @@
   <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
+    
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  getDocs, 
+  doc, 
+  getDoc, 
+  setDoc, 
+  updateDoc, 
+  deleteDoc 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    
 const firebaseConfig = {
   apiKey: "AIzaSyDx26t161SRZD6FAk0pj2eB_1DcWBII3zQ",
   authDomain: "delicias-baiana-pdv.firebaseapp.com",
