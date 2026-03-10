@@ -5,7 +5,8 @@
   "display": "standalone",
   "background_color": "#f2cb5d",
   "theme_color": "#770001",
-  "description": "App de gestao financeira e PDV para pequenos negocios de alimentacao",
+  "orientation": "portrait",
+  "lang": "pt-BR",
   "icons": [
 {
       "src": "icon-192.png",
