@@ -1171,16 +1171,26 @@ if ("serviceWorker" in navigator) {
       .catch((err) => console.log("Erro:", err));
   }
 
+// MENU LATERAL
+
 const menuBtn = document.getElementById("menuBtn");
-const sideMenu = document.getElementById("sideMenu");
 const closeMenu = document.getElementById("closeMenu");
 const menuOverlay = document.getElementById("menuOverlay");
+const sideMenu = document.getElementById("sideMenu");
 
-if (menuBtn && sideMenu) {
+function abrirMenu(){
+  sideMenu.classList.add("active");
+  menuOverlay.classList.add("active");
+}
 
-  menuBtn.addEventListener("click", () => {
-    sideMenu.classList.add("open");
-    menuOverlay.classList.add("active");
+function fecharMenu(){
+  sideMenu.classList.remove("active");
+  menuOverlay.classList.remove("active");
+}
+
+menuBtn.addEventListener("click", abrirMenu);
+closeMenu.addEventListener("click", fecharMenu);
+menuOverlay.addEventListener("click", fecharMenu);
   });
 
 }
