@@ -1125,6 +1125,7 @@ function init() {
   updateClock();
   updateOnlineStatus();
   setInterval(updateClock, 1000);
+  
   window.addEventListener("online", updateOnlineStatus);
   window.addEventListener("offline", updateOnlineStatus);
 
@@ -1134,26 +1135,20 @@ function init() {
   startAutoBackup();
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js")
-  .then(function () {
-    console.log("Service Worker registrado");
-  })
-  .catch(function (err) {
-    console.log("Erro ao registrar Service Worker:", err);
-  });
-}
+    navigator.serviceWorker.register("service-worker.js")
+      .then(() => console.log("Service Worker registrado"))
+      .catch((err) => console.log("Erro:", err));
+  }
 
 const menuBtn = document.getElementById("menuBtn");
 const sideMenu = document.getElementById("sideMenu");
-const overlay = document.getElementById("menuOverlay");
-const closeMenu = document.getElementById("closeMenu");
 
 if (menuBtn && sideMenu) {
-
   menuBtn.addEventListener("click", () => {
     sideMenu.classList.toggle("open");
   });
-
+}
+  
 }
   
 init();
