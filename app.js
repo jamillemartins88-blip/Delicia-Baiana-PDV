@@ -1132,7 +1132,6 @@ function init() {
   if (session) renderAll();
 
   startAutoBackup();
-  registerServiceWorker();
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js")
@@ -1167,6 +1166,7 @@ if (menuBtn && sideMenu) {
   });
 
 }
+  
 init();
 
 
