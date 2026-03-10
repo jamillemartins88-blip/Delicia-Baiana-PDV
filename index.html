@@ -1,8 +1,6 @@
 ﻿<!doctype html>
 <html lang="pt-BR">
 <head>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#16a34a">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#770001">
@@ -12,16 +10,26 @@
 </head>
 <body>
 
-  <!-- Botão abrir menu -->
 <button id="menuBtn" class="menu-btn">☰</button>
 
-<!-- Menu lateral -->
+<div id="menuOverlay" class="menu-overlay"></div>
+  
 <div id="sideMenu" class="side-menu">
-  <a href="#" onclick="showPage('pdv')">PDV</a>
-  <a href="#" onclick="showPage('produtos')">Produtos</a>
-  <a href="#" onclick="showPage('financeiro')">Financeiro</a>
-  <a href="#" onclick="showPage('relatorios')">Relatórios</a>
-  <a href="#" onclick="logout()">Sair</a>
+  
+  <div class="menu-header">
+    <h2>Delícia Baiana</h2>
+    <button id="closeMenu">✕</button>
+  </div>
+
+  <a onclick="showPage('dashboard')">🏠 Dashboard</a>
+  <a onclick="showPage('pdv')">💳 PDV</a>
+  <a onclick="showPage('cashflow')">💰 Fluxo de Caixa</a>
+  <a onclick="showPage('products')">🍔 Produtos</a>
+  <a onclick="showPage('reports')">📊 Relatórios</a>
+  <a onclick="showPage('closing')">🧾 Fechamento</a>
+  <a onclick="showPage('settings')">⚙️ Configurações</a>
+  <a onclick="logout()">🚪 Sair</a>
+
 </div>
   <div id="login-screen" class="login-screen">
     <form id="login-form" class="card login-card">
@@ -37,22 +45,7 @@
   </div>
 
   <div id="app" class="app hidden">
-    <aside class="sidebar">
-      <div class="brand">
-        <h2>Delicia Baiana</h2>
-      </div>
-      <nav id="menu">
-        <button data-view="dashboard" class="menu-item active">Dashboard</button>
-        <button data-view="pdv" class="menu-item">Nova Venda (PDV)</button>
-        <button data-view="cashflow" class="menu-item">Fluxo de Caixa</button>
-        <button data-view="products" class="menu-item">Produtos</button>
-        <button data-view="reports" class="menu-item">Relatorios</button>
-        <button data-view="closing" class="menu-item">Fechamento de Caixa</button>
-        <button data-view="settings" class="menu-item">Configuracoes</button>
-      </nav>
-      <button id="logout-btn" class="btn btn-secondary">Sair</button>
-    </aside>
-
+    
     <main class="content">
       <header class="topbar card">
         <div>
