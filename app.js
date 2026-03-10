@@ -207,7 +207,11 @@ function bindAuth() {
     renderAll();
   });
 
-  document.getElementById("logout-btn").addEventListener("click", () => {
+  const logoutBtn = document.getElementById("logout-btn");
+
+if(logoutBtn){
+  logoutBtn.addEventListener("click", logout);
+}
     session = null;
     localStorage.removeItem(SESSION_KEY);
     showApp();
