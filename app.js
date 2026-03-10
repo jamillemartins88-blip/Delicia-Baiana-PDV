@@ -1144,19 +1144,30 @@ if ("serviceWorker" in navigator) {
 
 const menuBtn = document.getElementById("menuBtn");
 const sideMenu = document.getElementById("sideMenu");
+const closeMenu = document.getElementById("closeMenu");
+const menuOverlay = document.getElementById("menuOverlay");
 
 if (menuBtn && sideMenu) {
 
   menuBtn.addEventListener("click", () => {
-    sideMenu.classList.toggle("open");
+    sideMenu.classList.add("open");
+    menuOverlay.classList.add("show");
   });
 
-  document.addEventListener("click", (e) => {
-    if (!sideMenu.contains(e.target) && !menuBtn.contains(e.target)) {
-      sideMenu.classList.remove("open");
-    }
-  });
+}
 
+if (closeMenu) {
+  closeMenu.addEventListener("click", () => {
+    sideMenu.classList.remove("open");
+    menuOverlay.classList.remove("show");
+  });
+}
+
+if (menuOverlay) {
+  menuOverlay.addEventListener("click", () => {
+    sideMenu.classList.remove("open");
+    menuOverlay.classList.remove("show");
+  });
 }
   
 }
