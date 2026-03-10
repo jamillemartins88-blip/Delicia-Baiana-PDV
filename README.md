@@ -1,23 +1,76 @@
-[README.md](https://github.com/user-attachments/files/25853659/README.md)
-# Delicia Baiana - Gestao Financeira e PDV
+# 🍤 Delícia Baiana PDV
 
-Aplicativo web responsivo (celular e desktop) com foco em pequenos negocios de alimentacao.
+Sistema de pedidos e controle de vendas desenvolvido para a culinária **Delícia Baiana**.
 
-## Como usar
-1. Abra o arquivo `index.html` no navegador.
-2. Login padrao:
-   - usuario: `admin`
-   - senha: `1234`
+Este sistema permite registrar pedidos, controlar vendas e facilitar o atendimento ao cliente.
 
-## Funcionalidades implementadas
-- Dashboard financeiro com metricas e graficos
-- PDV com carrinho, calculo de subtotal/total/troco, finalizacao e comprovante
-- Fluxo de caixa (entradas e saidas)
-- Cadastro e gestao de produtos com foto
-- Relatorios e exportacao (CSV/Excel e PDF por impressao)
-- Fechamento diario de caixa
-- Login de usuario
-- Backup automatico/manual e restauracao
-- Modo offline (PWA com Service Worker)
-- Sincronizacao em nuvem simplificada (espelho local)
-- Tema claro e escuro
+---
+
+## 🚀 Acesso ao Sistema
+
+Acesse o sistema online:
+
+https://delicia-baiana-pdv.vercel.app
+
+---
+
+## 🔑 Login padrão
+
+Usuário: admin  
+Senha: 1234
+
+---
+
+## 📋 Funcionalidades
+
+- Registro de pedidos
+- Controle de vendas
+- Interface simples e rápida
+- Acesso pelo celular ou computador
+- Sistema online
+
+---
+
+## 🛠️ Tecnologias utilizadas
+
+- HTML
+- CSS
+- JavaScript
+- Vercel (Hospedagem)
+
+---
+
+## 📱 Uso no celular
+
+Para usar como aplicativo:
+
+1. Abra o sistema no navegador
+2. Clique em **Adicionar à tela inicial**
+3. O sistema funcionará como um APP
+
+---
+
+## 🍽️ Projeto
+
+Sistema criado para gerenciamento de pedidos da **Delícia Baiana**.
+
+Especialidades:
+
+- Acarajé
+- Cuscuz recheado
+- Pirão de mandioca
+- Culinária baiana artesanal
+
+---
+
+## 📈 Futuras melhorias
+
+- Controle de estoque
+- Impressão de pedidos
+- Relatórios financeiros
+- Integração com WhatsApp
+- Banco de dados
+
+---
+
+Desenvolvido para facilitar a gestão de vendas e atendimento.
