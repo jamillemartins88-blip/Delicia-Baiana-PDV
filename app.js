@@ -991,7 +991,7 @@ function runBackup(reason = "automatico") {
 // BACKUP NA NUVEM
 async function backupCloud() {
 
- const data = JSON.parse(localStorage.getItem("pdv_data"));
+ const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
 
  await setDoc(doc(db, "backup", "principal"), {
    data: data,
@@ -1009,7 +1009,7 @@ async function restoreCloud() {
 
  if (docSnap.exists()) {
 
-   localStorage.setItem("pdv_data", JSON.stringify(docSnap.data().data));
+   localStorage.setItem(STORAGE_KEY, JSON.stringify(docSnap.data().data));
 
    alert("Backup restaurado!");
    location.reload();
