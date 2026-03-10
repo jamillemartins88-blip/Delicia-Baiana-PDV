@@ -1139,8 +1139,32 @@ function startAutoBackup() {
     runBackup("automatico");
   }, everyMs);
 }
+let sideMenu;
+let menuOverlay;
 
-function init() {
+function init(){
+
+sideMenu = document.getElementById("sideMenu");
+menuOverlay = document.getElementById("menuOverlay");
+
+const menuBtn = document.getElementById("menuBtn");
+const closeMenu = document.getElementById("closeMenu");
+
+function abrirMenu(){
+  sideMenu.classList.add("active");
+  menuOverlay.classList.add("active");
+}
+
+function fecharMenu(){
+  sideMenu.classList.remove("active");
+  menuOverlay.classList.remove("active");
+}
+
+menuBtn.addEventListener("click", abrirMenu);
+closeMenu.addEventListener("click", fecharMenu);
+menuOverlay.addEventListener("click", fecharMenu);
+
+}
   bindAuth();
   bindNavigation();
   bindPDV();
