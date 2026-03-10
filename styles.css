@@ -358,7 +358,25 @@ td {
   transition: right 0.3s ease;
   z-index: 1001;
 }
+.side-menu.active {
+  right: 0;
+}
+.side-menu a {
+  display: block;
+  padding: 14px 20px;
+  text-decoration: none;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  font-weight: 600;
+}
 
+.side-menu a:hover {
+  background: #f7f7f7;
+}
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
 /* CABEÇALHO */
 
 .menu-header {
@@ -376,4 +394,31 @@ td {
   color: white;
   font-size: 20px;
   cursor: pointer;
+}
+/* ABRIR MENU */
+
+.side-menu.active {
+  right: 0;
+}
+
+/* LINKS MENU */
+
+.side-menu a {
+  display: block;
+  padding: 14px 20px;
+  text-decoration: none;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  font-weight: 600;
+}
+
+.side-menu a:hover {
+  background: #f7f7f7;
+}
+
+/* FIX MOBILE */
+
+html, body {
+  height: 100%;
+  overflow-x: hidden;
 }
