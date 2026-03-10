@@ -442,6 +442,26 @@
     </main>
   </div>
 
+  <script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "SUA_KEY",
+  authDomain: "SEU_APP.firebaseapp.com",
+  projectId: "SEU_APP",
+  storageBucket: "SEU_APP.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.db = db;
+
+</script>
   <script src="./app.js"></script>
 </body>
 </html>
