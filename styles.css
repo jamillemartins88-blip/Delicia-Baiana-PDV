@@ -422,3 +422,14 @@ html, body {
   height: 100%;
   overflow-x: hidden;
 }
+button {
+  transition: 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
