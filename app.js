@@ -190,34 +190,53 @@ function showApp() {
 }
 
 function bindAuth() {
-  document.getElementById("login-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const username = document.getElementById("login-username").value.trim();
-    const password = document.getElementById("login-password").value;
-    const user = state.users.find((u) => u.username === username && u.password === password);
-    const error = document.getElementById("login-error");
-    if (!user) {
-      error.textContent = "Usuario ou senha invalidos.";
-      return;
-    }
-    session = { id: user.id, name: user.name, username: user.username };
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-    error.textContent = "";
-    showApp();
-    renderAll();
-  });
+
+  const loginForm = document.getElementById("login-form");
+
+  if(loginForm){
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById("login-username").value.trim();
+      const password = document.getElementById("login-password").value;
+
+      const user = state.users.find(
+        (u) => u.username === username && u.password === password
+      );
+
+      const error = document.getElementById("login-error");
+
+      if (!user) {
+        error.textContent = "Usuario ou senha invalidos.";
+        return;
+      }
+
+      session = { id: user.id, name: user.name, username: user.username };
+
+      localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+
+      error.textContent = "";
+
+      showApp();
+      renderAll();
+    });
+  }
 
   const logoutBtn = document.getElementById("logout-btn");
 
-if(logoutBtn){
-  logoutBtn.addEventListener("click", logout);
-}
-    session = null;
-    localStorage.removeItem(SESSION_KEY);
-    showApp();
-  });
-}
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
 
+      session = null;
+
+      localStorage.removeItem(SESSION_KEY);
+
+      showApp();
+
+    });
+  }
+
+}
 function bindNavigation() {
   const menu = document.getElementById("menu");
   menu.addEventListener("click", (e) => {
