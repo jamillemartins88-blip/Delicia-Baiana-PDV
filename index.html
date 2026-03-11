@@ -39,7 +39,7 @@
     <button id="closeMenu">✕</button>
   </div>
 
-  <a onclick="showPage('pdv')">📝 PDV</a>
+  <a onclick="showPage('pdv')">📝 Pedidos</a>
   <a onclick="showPage('cashflow')">💰 Fluxo de Caixa</a>
   <a onclick="showPage('products')">🧆 Produtos</a>
   <a onclick="showPage('reports')">📈 Relatórios</a>
@@ -65,25 +65,25 @@
         
       </header>
 
-      <section id="view-PDV" class="view active">
-        <div class="PDV-layout">
+      <section id="view-Pedidos" class="view active">
+        <div class="Pedidos-layout">
           <article class="card">
             <h4>Adicionar Itens</h4>
             <div class="form-row">
               <label>Produto</label>
-              <select id="PDV-product"></select>
+              <select id="Pedidos-product"></select>
             </div>
             <div class="form-grid">
               <div class="form-row">
                 <label>Quantidade</label>
-                <input id="PDV-qty" type="number" min="1" step="1" value="1">
+                <input id="Pedidos-qty" type="number" min="1" step="1" value="1">
               </div>
               <div class="form-row">
                 <label>Valor unitario (R$)</label>
-                <input id="PDV-unit-price" type="number" min="0" step="0.01">
+                <input id="Pedidos-unit-price" type="number" min="0" step="0.01">
               </div>
             </div>
-            <button id="PDV-add-item" class="btn btn-primary">Adicionar produto</button>
+            <button id="Pedidos-add-item" class="btn btn-primary">Adicionar produto</button>
           </article>
           <article class="card">
             <h4>Carrinho</h4>
@@ -98,18 +98,18 @@
                     <th></th>
                   </tr>
                 </thead>
-                <tbody id="PDV-cart-body"></tbody>
+                <tbody id="Pedidos-cart-body"></tbody>
               </table>
             </div>
             <div class="summary">
-              <p>Subtotal: <strong id="PDV-subtotal">R$ 0,00</strong></p>
-              <p>Taxa de entrega: <strong id="PDV-delivery-fee">R$ 0,00</strong></p>
-              <p>Total: <strong id="PDV-total">R$ 0,00</strong></p>
+              <p>Subtotal: <strong id="Pedidos-subtotal">R$ 0,00</strong></p>
+              <p>Taxa de entrega: <strong id="Pedidos-delivery-fee">R$ 0,00</strong></p>
+              <p>Total: <strong id="Pedidos-total">R$ 0,00</strong></p>
             </div>
             <div class="form-grid">
               <div class="form-row">
                 <label>Forma de pagamento</label>
-                <select id="PDV-payment">
+                <select id="Pedidos-payment">
                   <option>Dinheiro</option>
                   <option>PIX</option>
                   <option>Cartao de Debito</option>
@@ -119,14 +119,14 @@
               </div>
               <div class="form-row">
                 <label>Forma de entrega</label>
-                <select id="PDV-delivery">
+                <select id="Pedidos-delivery">
                   <option>Delivery</option>
                   <option>Retirada</option>
                 </select>
               </div>
-              <div id="PDV-delivery-zone-row" class="form-row">
+              <div id="Pedidos-delivery-zone-row" class="form-row">
                 <label>Regiao da entrega</label>
-                <select id="PDV-delivery-zone">
+                <select id="Pedidos-delivery-zone">
                   <option>Cidade</option>
                   <option>Outros</option>
                 </select>
@@ -135,14 +135,14 @@
             <div class="form-grid">
               <div class="form-row">
                 <label>Valor recebido (R$)</label>
-                <input id="PDV-cash-received" type="number" min="0" step="0.01">
+                <input id="Pedidos-cash-received" type="number" min="0" step="0.01">
               </div>
               <div class="form-row">
                 <label>Troco</label>
-                <input id="PDV-change" type="text" readonly>
+                <input id="Pedidos-change" type="text" readonly>
               </div>
             </div>
-            <button id="PDV-finish-sale" class="btn btn-accent">Finalizar venda</button>
+            <button id="Pedidos-finish-sale" class="btn btn-accent">Finalizar venda</button>
           </article>
         </div>
       </section>
@@ -151,22 +151,22 @@
         <div class="two-cols">
           <article class="card">
             <h4>Novo Lancamento</h4>
-            <form id="cashflow-form">
+            <form id="Fluxo de caixa-form">
               <div class="form-row">
                 <label>Tipo</label>
-                <select id="cash-type" required>
+                <select id="Fluxo-type" required>
                   <option value="entrada">Entrada</option>
                   <option value="saida">Saida</option>
                 </select>
               </div>
               <div class="form-row">
                 <label>Descricao</label>
-                <input id="cash-description" type="text" required>
+                <input id="Fluxo-description" type="text" required>
               </div>
               <div class="form-grid">
                 <div class="form-row">
                   <label>Categoria</label>
-                  <select id="cash-category" required>
+                  <select id="Fluxo-category" required>
                     <option>vendas</option>
                     <option>outras receitas</option>
                     <option>compras</option>
@@ -177,17 +177,17 @@
                 </div>
                 <div class="form-row">
                   <label>Valor</label>
-                  <input id="cash-value" type="number" min="0" step="0.01" required>
+                  <input id="Fluxo-value" type="number" min="0" step="0.01" required>
                 </div>
               </div>
               <div class="form-grid">
                 <div class="form-row">
                   <label>Data</label>
-                  <input id="cash-date" type="date" required>
+                  <input id="Fluxo-date" type="date" required>
                 </div>
                 <div class="form-row">
                   <label>Forma de pagamento</label>
-                  <select id="cash-payment" required>
+                  <select id="Fluxo-payment" required>
                     <option>Dinheiro</option>
                     <option>PIX</option>
                     <option>Cartao de debito</option>
@@ -198,7 +198,7 @@
               </div>
               <div class="form-row">
                 <label>Observacoes</label>
-                <textarea id="cash-notes" rows="3"></textarea>
+                <textarea id="Fluxo-notes" rows="3"></textarea>
               </div>
               <button class="btn btn-primary" type="submit">Salvar lancamento</button>
             </form>
@@ -216,45 +216,45 @@
                     <th>Valor</th>
                   </tr>
                 </thead>
-                <tbody id="cashflow-body"></tbody>
+                <tbody id="Fluxo de caixa-body"></tbody>
               </table>
             </div>
           </article>
         </div>
       </section>
 
-      <section id="view-Produtos" class="view">
+      <section id="view-Produto" class="view">
         <div class="two-cols">
           <article class="card">
             <h4>Cadastro de Produto</h4>
-            <form id="product-form">
-              <input id="product-id" type="hidden">
+            <form id="Produto-form">
+              <input id="Produto-id" type="hidden">
               <div class="form-row">
                 <label>Nome do produto</label>
-                <input id="product-name" type="text" required>
+                <input id="Produto-name" type="text" required>
               </div>
               <div class="form-row">
                 <label>Categoria</label>
-                <input id="product-category" type="text" required>
+                <input id="Produto-category" type="text" required>
               </div>
               <div class="form-grid">
                 <div class="form-row">
                   <label>Preco</label>
-                  <input id="product-price" type="number" min="0" step="0.01" required>
+                  <input id="Produto-price" type="number" min="0" step="0.01" required>
                 </div>
                 <div class="form-row">
                   <label>Custo</label>
-                  <input id="product-cost" type="number" min="0" step="0.01" required>
+                  <input id="Produto-cost" type="number" min="0" step="0.01" required>
                 </div>
               </div>
               <div class="form-row">
                 <label>Margem de lucro</label>
-                <input id="product-margin" type="text" readonly>
+                <input id="Produto-margin" type="text" readonly>
               </div>
               <div class="form-row">
                 <label>Foto do produto</label>
-                <input id="product-photo" type="file" accept="image/*">
-                <img id="product-preview" class="product-preview hidden" alt="Preview">
+                <input id="Produto-photo" type="file" accept="image/*">
+                <img id="Produto-preview" class="product-preview hidden" alt="Preview">
               </div>
               <button class="btn btn-primary" type="submit">Salvar produto</button>
             </form>
@@ -274,69 +274,69 @@
                     <th>Acoes</th>
                   </tr>
                 </thead>
-                <tbody id="products-body"></tbody>
+                <tbody id="Produto-body"></tbody>
               </table>
             </div>
           </article>
         </div>
       </section>
 
-      <section id="view-Relatórios" class="view">
+      <section id="view-Relatório" class="view">
         <article class="card">
           <h4>Filtros</h4>
           <div class="form-grid">
             <div class="form-row">
               <label>Data inicial</label>
-              <input id="report-start" type="date">
+              <input id="Relatório-start" type="date">
             </div>
             <div class="form-row">
               <label>Data final</label>
-              <input id="report-end" type="date">
+              <input id="Relatório-end" type="date">
             </div>
           </div>
           <div class="actions">
-            <button id="report-generate" class="btn btn-primary">Gerar relatorios</button>
-            <button id="report-export-excel" class="btn btn-secondary">Exportar Excel</button>
-            <button id="report-export-pdf" class="btn btn-secondary">Exportar PDF</button>
+            <button id="Relatório-generate" class="btn btn-primary">Gerar relatorios</button>
+            <button id="Relatório-export-excel" class="btn btn-secondary">Exportar Excel</button>
+            <button id="Relatório-export-pdf" class="btn btn-secondary">Exportar PDF</button>
           </div>
         </article>
         <article class="card">
           <h4>Resumo de Relatorios</h4>
-          <div id="report-output"></div>
+          <div id="Relatório-output"></div>
         </article>
       </section>
 
       <section id="view-Fechamento" class="view">
         <article class="card">
           <h4>Fechamento de Caixa Diario</h4>
-          <p>Data: <strong id="closing-date"></strong></p>
+          <p>Data: <strong id="Fechamento-date"></strong></p>
           <div class="metrics-grid">
             <article class="metric card">
               <h4>Total vendido</h4>
-              <p id="closing-sold">R$ 0,00</p>
+              <p id="Fechamento-sold">R$ 0,00</p>
             </article>
             <article class="metric card">
               <h4>Total em dinheiro</h4>
-              <p id="closing-cash">R$ 0,00</p>
+              <p id="Fechamento-cash">R$ 0,00</p>
             </article>
             <article class="metric card">
               <h4>Total em cartao</h4>
-              <p id="closing-card">R$ 0,00</p>
+              <p id="Fechamento-card">R$ 0,00</p>
             </article>
             <article class="metric card">
               <h4>Total em PIX</h4>
-              <p id="closing-pix">R$ 0,00</p>
+              <p id="Fechamento-pix">R$ 0,00</p>
             </article>
             <article class="metric card">
               <h4>Total de despesas</h4>
-              <p id="closing-expenses">R$ 0,00</p>
+              <p id="Fechamento-expenses">R$ 0,00</p>
             </article>
             <article class="metric card">
               <h4>Lucro do dia</h4>
-              <p id="closing-profit">R$ 0,00</p>
+              <p id="Fechamento-profit">R$ 0,00</p>
             </article>
           </div>
-          <button id="closing-print" class="btn btn-accent">Imprimir fechamento</button>
+          <button id="Fechamento-print" class="btn btn-accent">Imprimir fechamento</button>
         </article>
       </section>
       
