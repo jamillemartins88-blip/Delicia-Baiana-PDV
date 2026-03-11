@@ -37,23 +37,23 @@
   
   <div class="menu-header">
     <h2>Delícias Baiana</h2>
-    <button id="closeMenu">✕</button>
+    <button id="closeMenu" onclick="toggleMenu()">✕</button>
   </div>
 
   <a onclick="showPage('Pedidos')">📝 Pedidos</a>
-  <a onclick="showPage('Fluxo de caixa')">💰 Fluxo de Caixa</a>
+  <a onclick="showPage('Fluxocaixa')">💰 Fluxo de Caixa</a>
   <a onclick="showPage('Produtos')">🧆 Produtos</a>
-  <a onclick="showPage('Relatórios')">📈 Relatórios</a>
+  <a onclick="showPage('Relatorios')">📈 Relatórios</a>
   <a onclick="showPage('Fechamento')">🖥️ Fechamento</a>
   <a onclick="showPage('Dashboard')">📊 Dashboard</a>
-  <a onclick="showPage('Configurações')">⚙️ Configurações</a>
+  <a onclick="showPage('Configuracoes')">⚙️ Configurações</a>
   <a id="logout-btn">🚪 Sair</a>
 
 </div>  
     <main class="content">
       <header class="topbar card">
-      <button id="menuBtn" class="menu-btn">☰</button>
-        
+      <button id="menuBtn" class="menu-btn" onclick="toggleMenu()">☰</button>
+      
         <div>
           <h3 id="page-title">Pedidos</h3>
           <small id="datetime-now"></small>
@@ -188,7 +188,7 @@
         </div>
       </section>
 
-      <section id="view-Fluxo de caixa" class="view">
+      <section id="view-Fluxocaixa" class="view">
         <div class="two-cols">
           <article class="card">
             <h4>Novo Lancamento</h4>
@@ -322,7 +322,7 @@
         </div>
       </section>
 
-      <section id="view-Relatórios" class="view">
+      <section id="view-Relatorios" class="view">
         <article class="card">
           <h4>Filtros</h4>
           <div class="form-grid">
@@ -381,7 +381,7 @@
         </article>
       </section>
 
-      <section id="view-Configurações" class="view">
+      <section id="view-Configuracoes" class="view">
         <div class="two-cols">
           <article class="card">
             <h4>Configuracoes Gerais</h4>
@@ -489,6 +489,18 @@ window.doc = doc;
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="./app.js"></script>
 
+   <script>
+function toggleMenu(){
+
+const menu = document.getElementById("sideMenu");
+const overlay = document.getElementById("menuOverlay");
+
+menu.classList.toggle("open");
+overlay.classList.toggle("active");
+
+}
+    <script>
+      
     <script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("./service-worker.js");
