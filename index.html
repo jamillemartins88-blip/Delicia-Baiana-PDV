@@ -8,7 +8,7 @@
   <link rel="manifest" href="./manifest.json">
   <link rel="stylesheet" href="./styles.css">
   <link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-512.png">
 </head>
 <body>
  
@@ -191,22 +191,22 @@
         <div class="two-cols">
           <article class="card">
             <h4>Novo Lancamento</h4>
-            <form id="Fluxo de caixa-form">
+            <form id="Fluxocaixa-form">
               <div class="form-row">
                 <label>Tipo</label>
-                <select id="Fluxo de caixa-type" required>
+                <select id="Fluxocaixa-type" required>
                   <option value="entrada">Entrada</option>
                   <option value="saida">Saida</option>
                 </select>
               </div>
               <div class="form-row">
                 <label>Descricao</label>
-                <input id="Fluxo de caixa-description" type="text" required>
+                <input id="Fluxocaixa-description" type="text" required>
               </div>
               <div class="form-grid">
                 <div class="form-row">
                   <label>Categoria</label>
-                  <select id="Fluxo de caixa-category" required>
+                  <select id="Fluxocaixa-category" required>
                     <option>vendas</option>
                     <option>outras receitas</option>
                     <option>compras</option>
@@ -217,17 +217,17 @@
                 </div>
                 <div class="form-row">
                   <label>Valor</label>
-                  <input id="Fluxo de caixa-value" type="number" min="0" step="0.01" required>
+                  <input id="Fluxocaixa-value" type="number" min="0" step="0.01" required>
                 </div>
               </div>
               <div class="form-grid">
                 <div class="form-row">
                   <label>Data</label>
-                  <input id="Fluxo de caixa-date" type="date" required>
+                  <input id="Fluxocaixa-date" type="date" required>
                 </div>
                 <div class="form-row">
                   <label>Forma de pagamento</label>
-                  <select id="Fluxo de caixa-payment" required>
+                  <select id="Fluxocaixa-payment" required>
                     <option>Dinheiro</option>
                     <option>PIX</option>
                     <option>Cartao de debito</option>
@@ -238,7 +238,7 @@
               </div>
               <div class="form-row">
                 <label>Observacoes</label>
-                <textarea id="Fluxo de caixa-notes" rows="3"></textarea>
+                <textarea id="Fluxocaixa-notes" rows="3"></textarea>
               </div>
               <button class="btn btn-primary" type="submit">Salvar lancamento</button>
             </form>
@@ -256,7 +256,7 @@
                     <th>Valor</th>
                   </tr>
                 </thead>
-                <tbody id="Fluxo de caixa-body"></tbody>
+                <tbody id="Fluxocaixa-body"></tbody>
               </table>
             </div>
           </article>
@@ -327,22 +327,22 @@
           <div class="form-grid">
             <div class="form-row">
               <label>Data inicial</label>
-              <input id="Relatórios-start" type="date">
+              <input id="Relatorios-start" type="date">
             </div>
             <div class="form-row">
               <label>Data final</label>
-              <input id="Relatórios-end" type="date">
+              <input id="Relatorios-end" type="date">
             </div>
           </div>
           <div class="actions">
-            <button id="Relatórios-generate" class="btn btn-primary">Gerar relatorios</button>
-            <button id="Relatórios-export-excel" class="btn btn-secondary">Exportar Excel</button>
-            <button id="Relatórios-export-pdf" class="btn btn-secondary">Exportar PDF</button>
+            <button id="Relatorios-generate" class="btn btn-primary">Gerar relatorios</button>
+            <button id="Relatorios-export-excel" class="btn btn-secondary">Exportar Excel</button>
+            <button id="Relatorios-export-pdf" class="btn btn-secondary">Exportar PDF</button>
           </div>
         </article>
         <article class="card">
           <h4>Resumo de Relatorios</h4>
-          <div id="Relatórios-output"></div>
+          <div id="Relatorios-output"></div>
         </article>
       </section>
 
@@ -386,16 +386,16 @@
             <h4>Configuracoes Gerais</h4>
             <div class="form-row">
               <label>Nome do negocio</label>
-              <input id="Configurações-business-name" type="text">
+              <input id="Configuracoes-business-name" type="text">
             </div>
             <div class="form-row">
               <label>Tema</label>
-              <select id="Configurações-theme">
+              <select id="Configuracoes-theme">
                 <option value="light">Claro</option>
                 <option value="dark">Escuro</option>
               </select>
             </div>
-            <button id="save-Configurações" class="btn btn-primary">Salvar configuracoes</button>
+            <button id="save-Configuracoes" class="btn btn-primary">Salvar configuracoes</button>
             <hr>
             <h5>Backup</h5>
             <div class="actions">
@@ -467,7 +467,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
+  apiKey: "SAIzaSyDx26t161SRZD6FAk0pj2eB_1DcWBII3zQ",
+
   authDomain: "delicias-baiana-pdv.firebaseapp.com",
   projectId: "delicias-baiana-pdv",
   storageBucket: "delicias-baiana-pdv.firebasestorage.app",
@@ -484,9 +485,15 @@ window.getDoc = getDoc;
 window.doc = doc;
 
 </script>
-  
+ 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="./app.js"></script>
 
+    <script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./service-worker.js");
+}
+</script>
+  
 </body>
 </html>
