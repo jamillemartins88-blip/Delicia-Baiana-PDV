@@ -2,6 +2,8 @@
 const SESSION_KEY = "delicias_baiana_session";
 const CLOUD_KEY = "delicias_baiana_cloud_mirror";
 
+const API_PLANILHA = "https://script.google.com/macros/s/AKfycbDM9wVhMGcPnpzVdqWoHpSt_5T1GodThTUywze_CqC2x93cMfkWxgKUdTZxcDDkfSpg/exec";
+
 const fmt = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
 let session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
@@ -322,6 +324,8 @@ function bindPDV() {
 
     state.sales.unshift(sale);
     saveState();
+
+    enviarVendaParaPlanilha(sale);
 
     printReceipt(sale);
 
@@ -1251,7 +1255,34 @@ if(menuOverlay) menuOverlay.addEventListener("click", fecharMenu);
   sideMenu.classList.remove("active");
   menuOverlay.classList.remove("active");
 
-} 
+}
+async function enviarVendaParaPlanilha(sale){
+
+  try{
+
+    await fetch(API_PLANILHA,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        data: new Date().toLocaleString("pt-BR"),
+        itens: sale.items.map(i => i.name + " ("+i.qty+")").join(", "),
+        pagamento: sale.paymentMethod,
+        entrega: sale.deliveryMethod,
+        total: sale.total
+      })
+    });
+
+    console.log("Venda enviada para planilha");
+
+  }catch(error){
+
+    console.error("Erro ao enviar para planilha", error);
+
+  }
+
+}
 init();
 
 
