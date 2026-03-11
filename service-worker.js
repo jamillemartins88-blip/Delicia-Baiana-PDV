@@ -1,51 +1,69 @@
-const CACHE = "delicias-pdv-cache-v1";
+const CACHE = "delicias-pdv-cache-v2";
+
 const ASSETS = [
-  "./",
-  "./index.html",
-  "./styles.css",
-  "./app.js",
-  "./manifest.json",
-  "./icon-192.png",
-  "./icon-512.png"
+  "/",
+  "/index.html",
+  "/styles.css",
+  "/app.js",
+  "/manifest.json",
+  "/icon-192.png",
+  "/icon-512.png"
 ];
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(ASSETS))
-  );
   self.skipWaiting();
+
+  event.waitUntil(
+    caches.open(CACHE).then((cache) => {
+      return cache.addAll(ASSETS);
+    })
+  );
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => 
+    caches.keys().then((keys) =>
       Promise.all(
-        keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))
+        keys
+          .filter((key) => key !== CACHE)
+          .map((key) => caches.delete(key))
       )
     )
   );
-  self.clients.claim();
+
+  return self.clients.claim();
 });
 
 self.addEventListener("fetch", (event) => {
+
+  if (event.request.method !== "GET") return;
+
   event.respondWith(
     caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      
+
+      if (cached) {
+        return cached;
+      }
+
       return fetch(event.request)
         .then((response) => {
-          if (!response || response.status !== 200 || response.type !== "basic") {
+
+          if (!response || response.status !== 200) {
             return response;
           }
-          const copy = response.clone();
-          
+
+          const responseClone = response.clone();
+
           caches.open(CACHE).then((cache) => {
-            cache.put(event.request, copy);
-        });
-          
+            cache.put(event.request, responseClone);
+          });
+
           return response;
         })
-        .catch(() => caches.match("./index.html"));
+        .catch(() => {
+          return caches.match("/index.html");
+        });
+
     })
   );
 });
