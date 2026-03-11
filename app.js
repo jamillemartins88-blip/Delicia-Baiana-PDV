@@ -7,7 +7,7 @@ const API_PLANILHA = "https://script.google.com/macros/s/AKfycbDM9wVhMGcPnpzVdqW
 const fmt = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
 let session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
-let pdvCart = [];
+let pedidosCart = [];
 let productPhotoData = "";
 const DEFAULT_PRODUCTS = [
   { name: "Acaraje Tradicional", category: "Acaraje", price: 15, cost: 7 },
@@ -247,24 +247,24 @@ function bindAuth() {
 
 }
 
-function bindPDV() {
-  document.getElementById("pdv-product").addEventListener("change", (e) => {
+function bindPedidos() {
+  document.getElementById("Pedidos-product").addEventListener("change", (e) => {
     const product = state.products.find((p) => p.id === e.target.value);
-    if (product) document.getElementById("pdv-unit-price").value = product.price.toFixed(2);
+    if (product) document.getElementById("Pedidos-unit-price").value = product.price.toFixed(2);
   });
 
-  document.getElementById("pdv-add-item").addEventListener("click", () => {
-    const productId = document.getElementById("pdv-product").value;
+  document.getElementById("Pedidos-add-item").addEventListener("click", () => {
+    const productId = document.getElementById("Pedidos-product").value;
     const product = state.products.find((p) => p.id === productId);
-    const qty = Number(document.getElementById("pdv-qty").value || 0);
-    const unitPrice = Number(document.getElementById("pdv-unit-price").value || 0);
+    const qty = Number(document.getElementById("Pedidos-qty").value || 0);
+    const unitPrice = Number(document.getElementById("Pedidos-unit-price").value || 0);
 
     if (!product || qty <= 0 || unitPrice < 0) {
       notify("Preencha produto, quantidade e valor corretamente.");
       return;
     }
 
-    pdvCart.push({
+    pedidosCart.push({
       id: crypto.randomUUID(),
       productId: product.id,
       name: product.name,
@@ -274,32 +274,32 @@ function bindPDV() {
       cost: Number(product.cost || 0)
     });
 
-    document.getElementById("pdv-qty").value = "1";
-    updatePDVSummary();
-    renderPDVCart();
+    document.getElementById("Pedidos-qty").value = "1";
+    updatePedidosSummary();
+    renderPedidosCart();
   });
 
-  document.getElementById("pdv-cash-received").addEventListener("input", updatePDVSummary);
-  document.getElementById("pdv-payment").addEventListener("change", updatePDVSummary);
-  document.getElementById("pdv-delivery").addEventListener("change", () => {
+  document.getElementById("Pedidos-cash-received").addEventListener("input", updatePedidosSummary);
+  document.getElementById("Pedidos-payment").addEventListener("change", updatePedidosSummary);
+  document.getElementById("Pedidos-delivery").addEventListener("change", () => {
     toggleDeliveryZone();
-    updatePDVSummary();
+    updatePedidosSummary();
   });
-  document.getElementById("pdv-delivery-zone").addEventListener("change", updatePDVSummary);
+  document.getElementById("Pedidos-delivery-zone").addEventListener("change", updatePedidosSummary);
 
-  document.getElementById("pdv-finish-sale").addEventListener("click", () => {
-    if (!pdvCart.length) {
+  document.getElementById("Pedidos-finish-sale").addEventListener("click", () => {
+    if (!pedidosCart.length) {
       notify("Adicione itens no carrinho para finalizar a venda.");
       return;
     }
 
-    const paymentMethod = document.getElementById("pdv-payment").value;
-    const deliveryMethod = document.getElementById("pdv-delivery").value;
-    const deliveryZone = deliveryMethod === "Delivery" ? document.getElementById("pdv-delivery-zone").value : "Retirada";
-    const subtotal = pdvCart.reduce((sum, item) => sum + item.total, 0);
+    const paymentMethod = document.getElementById("Pedidos-payment").value;
+    const deliveryMethod = document.getElementById("Pedidos-delivery").value;
+    const deliveryZone = deliveryMethod === "Delivery" ? document.getElementById("Pedidos-delivery-zone").value : "Retirada";
+    const subtotal = pedidosCart.reduce((sum, item) => sum + item.total, 0);
     const deliveryFee = getDeliveryFee(deliveryMethod, deliveryZone);
     const total = subtotal + deliveryFee;
-    const cashReceived = Number(document.getElementById("pdv-cash-received").value || 0);
+    const cashReceived = Number(document.getElementById("Pedidos-cash-received").value || 0);
     const change = paymentMethod === "Dinheiro" ? Math.max(cashReceived - total, 0) : 0;
 
     if (paymentMethod === "Dinheiro" && cashReceived < total) {
@@ -309,7 +309,7 @@ function bindPDV() {
 
     const sale = {
       id: crypto.randomUUID(),
-      items: [...pdvCart],
+      items: [...pedidosCart],
       subtotal,
       deliveryFee,
       total,
@@ -329,10 +329,10 @@ function bindPDV() {
 
     printReceipt(sale);
 
-    pdvCart = [];
-    document.getElementById("pdv-cash-received").value = "";
-    updatePDVSummary();
-    renderPDVCart();
+    pedidosCart = [];
+    document.getElementById("Pedidos-cash-received").value = "";
+    updatePedidosSummary();
+    renderPedidosCart();
     renderDashboard();
     renderReports();
     renderClosing();
@@ -340,8 +340,8 @@ function bindPDV() {
   });
 }
 
-function renderPDV() {
-  const select = document.getElementById("pdv-product");
+function renderpedidos() {
+  const select = document.getElementById("Pedidos-product");
   const quick = document.getElementById("quick-products");
 
   select.innerHTML = "";
@@ -355,7 +355,7 @@ function renderPDV() {
   const first = state.products[0];
   if (first) {
     select.value = first.id;
-    document.getElementById("pdv-unit-price").value = Number(first.price).toFixed(2);
+    document.getElementById("Pedidos-unit-price").value = Number(first.price).toFixed(2);
   }
 
   quick.innerHTML = "";
@@ -364,7 +364,7 @@ function renderPDV() {
     btn.type = "button";
     btn.textContent = `${p.name} - ${fmt.format(p.price)}`;
     btn.addEventListener("click", () => {
-      pdvCart.push({
+      pedidosCart.push({
         id: crypto.randomUUID(),
         productId: p.id,
         name: p.name,
@@ -373,22 +373,22 @@ function renderPDV() {
         total: Number(p.price),
         cost: Number(p.cost || 0)
       });
-      renderPDVCart();
-      updatePDVSummary();
+      renderPedidosCart();
+      updatePedidosSummary();
     });
     quick.appendChild(btn);
   });
 
   toggleDeliveryZone();
-  renderPDVCart();
-  updatePDVSummary();
+  renderPedidosCart();
+  updatePedidosSummary();
 }
 
-function renderPDVCart() {
-  const body = document.getElementById("pdv-cart-body");
+function renderPedidosCart() {
+  const body = document.getElementById("Pedidos-cart-body");
   body.innerHTML = "";
 
-  pdvCart.forEach((item) => {
+  pedidosCart.forEach((item) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${item.name}</td>
@@ -402,9 +402,9 @@ function renderPDVCart() {
 
   body.querySelectorAll("button[data-remove]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      pdvCart = pdvCart.filter((item) => item.id !== btn.dataset.remove);
-      renderPDVCart();
-      updatePDVSummary();
+     pedidosCart = pedidosCart.filter((item) => item.id !== btn.dataset.remove);
+      renderPedidosCart();
+      updatePedidosSummary();
     });
   });
 }
@@ -416,26 +416,26 @@ function getDeliveryFee(deliveryMethod, deliveryZone) {
 }
 
 function toggleDeliveryZone() {
-  const deliveryMethod = document.getElementById("pdv-delivery")?.value || "Delivery";
-  const row = document.getElementById("pdv-delivery-zone-row");
+  const deliveryMethod = document.getElementById("Pedidos-delivery")?.value || "Delivery";
+  const row = document.getElementById("Pedidos-delivery-zone-row");
   if (!row) return;
   row.style.display = deliveryMethod === "Delivery" ? "grid" : "none";
 }
 
-function updatePDVSummary() {
-  const subtotal = pdvCart.reduce((sum, item) => sum + item.total, 0);
-  const deliveryMethod = document.getElementById("pdv-delivery")?.value || "Delivery";
-  const deliveryZone = document.getElementById("pdv-delivery-zone")?.value || "Cidade";
+function updatePedidosSummary() {
+  const subtotal = pedidosCart.reduce((sum, item) => sum + item.total, 0);
+  const deliveryMethod = document.getElementById("Pedidos-delivery")?.value || "Delivery";
+  const deliveryZone = document.getElementById("Pedidos-delivery-zone")?.value || "Cidade";
   const deliveryFee = getDeliveryFee(deliveryMethod, deliveryZone);
   const total = subtotal + deliveryFee;
-  const paymentMethod = document.getElementById("pdv-payment")?.value || "Dinheiro";
-  const cashReceived = Number(document.getElementById("pdv-cash-received")?.value || 0);
+  const paymentMethod = document.getElementById("Pedidos-payment")?.value || "Dinheiro";
+  const cashReceived = Number(document.getElementById("Pedidos-cash-received")?.value || 0);
   const change = paymentMethod === "Dinheiro" ? Math.max(cashReceived - total, 0) : 0;
 
-  document.getElementById("pdv-subtotal").textContent = fmt.format(subtotal);
-  document.getElementById("pdv-delivery-fee").textContent = fmt.format(deliveryFee);
-  document.getElementById("pdv-total").textContent = fmt.format(total);
-  document.getElementById("pdv-change").value = fmt.format(change);
+  document.getElementById("Pedidos-subtotal").textContent = fmt.format(subtotal);
+  document.getElementById("Pedidos-delivery-fee").textContent = fmt.format(deliveryFee);
+  document.getElementById("Pedidos-total").textContent = fmt.format(total);
+  document.getElementById("Pedidos-change").value = fmt.format(change);
 }
 
 function printReceipt(sale) {
@@ -480,20 +480,20 @@ function printReceipt(sale) {
 }
 
 function bindCashflow() {
-  document.getElementById("cash-date").value = todayISO();
+  document.getElementById("Fluxocaixa-date").value = todayISO();
 
-  document.getElementById("cashflow-form").addEventListener("submit", (e) => {
+  document.getElementById("Fluxocaixa-form").addEventListener("submit", (e) => {
     e.preventDefault();
 
     const entry = {
       id: crypto.randomUUID(),
-      type: document.getElementById("cash-type").value,
-      description: document.getElementById("cash-description").value.trim(),
-      category: document.getElementById("cash-category").value,
-      value: Number(document.getElementById("cash-value").value || 0),
-      date: document.getElementById("cash-date").value,
-      paymentMethod: document.getElementById("cash-payment").value,
-      notes: document.getElementById("cash-notes").value.trim(),
+      type: document.getElementById("Fluxocaixa-type").value,
+      description: document.getElementById("Fluxocaixa-description").value.trim(),
+      category: document.getElementById("Fluxocaixa-category").value,
+      value: Number(document.getElementById("Fluxocaixa-value").value || 0),
+      date: document.getElementById("Fluxocaixa-date").value,
+      paymentMethod: document.getElementById("Fluxocaixa-payment").value,
+      notes: document.getElementById("Fluxocaixa-notes").value.trim(),
       createdAt: new Date().toISOString()
     };
 
@@ -506,7 +506,7 @@ function bindCashflow() {
     saveState();
 
     e.target.reset();
-    document.getElementById("cash-date").value = todayISO();
+    document.getElementById("Fluxocaixa-date").value = todayISO();
     renderCashflow();
     renderDashboard();
     renderClosing();
@@ -515,7 +515,7 @@ function bindCashflow() {
 }
 
 function renderCashflow() {
-  const body = document.getElementById("cashflow-body");
+  const body = document.getElementById("Fluxocaixa-body");
   body.innerHTML = "";
   state.cashEntries.slice(0, 120).forEach((entry) => {
     const tr = document.createElement("tr");
@@ -531,40 +531,40 @@ function renderCashflow() {
 }
 
 function bindProducts() {
-  const photoInput = document.getElementById("product-photo");
+  const photoInput = document.getElementById("Produtos-photo");
   photoInput.addEventListener("change", () => {
     const file = photoInput.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
       productPhotoData = reader.result;
-      const preview = document.getElementById("product-preview");
+      const preview = document.getElementById("Produtos-preview");
       preview.src = String(productPhotoData);
       preview.classList.remove("hidden");
     };
     reader.readAsDataURL(file);
   });
 
-  const price = document.getElementById("product-price");
-  const cost = document.getElementById("product-cost");
+  const price = document.getElementById("Produtos-price");
+  const cost = document.getElementById("Produtos-cost");
 
   [price, cost].forEach((el) => {
     el.addEventListener("input", () => {
       const p = Number(price.value || 0);
       const c = Number(cost.value || 0);
       const margin = p > 0 ? ((p - c) / p) * 100 : 0;
-      document.getElementById("product-margin").value = `${margin.toFixed(2)}%`;
+      document.getElementById("Produtos-margin").value = `${margin.toFixed(2)}%`;
     });
   });
 
-  document.getElementById("product-form").addEventListener("submit", (e) => {
+  document.getElementById("Produtos-form").addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const id = document.getElementById("product-id").value;
-    const name = document.getElementById("product-name").value.trim();
-    const category = document.getElementById("product-category").value.trim();
-    const productPrice = Number(document.getElementById("product-price").value || 0);
-    const productCost = Number(document.getElementById("product-cost").value || 0);
+    const id = document.getElementById("Produtos-id").value;
+    const name = document.getElementById("Produtos-name").value.trim();
+    const category = document.getElementById("Produtos-category").value.trim();
+    const productPrice = Number(document.getElementById("Produtos-price").value || 0);
+    const productCost = Number(document.getElementById("Produtos-cost").value || 0);
     const margin = productPrice > 0 ? ((productPrice - productCost) / productPrice) * 100 : 0;
 
     if (!name || !category || productPrice <= 0) {
@@ -599,25 +599,25 @@ function bindProducts() {
     }
 
     saveState();
-    clearProductForm();
+    clearProdutosForm();
     renderProducts();
-    renderPDV();
+    renderpedidos();
     renderDashboard();
     notify("Produto salvo com sucesso.");
   });
 }
-function clearProductForm() {
-  document.getElementById("product-form").reset();
-  document.getElementById("product-id").value = "";
-  document.getElementById("product-margin").value = "";
-  const preview = document.getElementById("product-preview");
+function clearProdutosForm() {
+  document.getElementById("Produtos-form").reset();
+  document.getElementById("Produtos-id").value = "";
+  document.getElementById("Produtos-margin").value = "";
+  const preview = document.getElementById("Produtos-preview");
   preview.classList.add("hidden");
   preview.src = "";
   productPhotoData = "";
 }
 
 function renderProducts() {
-  const body = document.getElementById("products-body");
+  const body = document.getElementById("Produtos-body");
   body.innerHTML = "";
 
   state.products.forEach((product) => {
@@ -641,14 +641,14 @@ function renderProducts() {
     btn.addEventListener("click", () => {
       const product = state.products.find((p) => p.id === btn.dataset.edit);
       if (!product) return;
-      document.getElementById("product-id").value = product.id;
-      document.getElementById("product-name").value = product.name;
-      document.getElementById("product-category").value = product.category;
-      document.getElementById("product-price").value = Number(product.price).toFixed(2);
-      document.getElementById("product-cost").value = Number(product.cost).toFixed(2);
-      document.getElementById("product-margin").value = `${Number(product.margin).toFixed(2)}%`;
+      document.getElementById("Produtos-id").value = product.id;
+      document.getElementById("Produtos-name").value = product.name;
+      document.getElementById("Produtos-category").value = product.category;
+      document.getElementById("Produtos-price").value = Number(product.price).toFixed(2);
+      document.getElementById("Produtos-cost").value = Number(product.cost).toFixed(2);
+      document.getElementById("Produtos-margin").value = `${Number(product.margin).toFixed(2)}%`;
       productPhotoData = product.photo || "";
-      const preview = document.getElementById("product-preview");
+      const preview = document.getElementById("Produtos-preview");
       if (product.photo) {
         preview.src = product.photo;
         preview.classList.remove("hidden");
@@ -665,7 +665,7 @@ function renderProducts() {
       state.products = state.products.filter((p) => p.id !== btn.dataset.delete);
       saveState();
       renderProducts();
-      renderPDV();
+      renderpedidos();
     });
   });
 }
@@ -865,9 +865,9 @@ function buildReportData(start, end) {
 }
 
 function renderReports() {
-  const output = document.getElementById("report-output");
-  const start = document.getElementById("report-start").value;
-  const end = document.getElementById("report-end").value;
+  const output = document.getElementById("Relatorios-output");
+  const start = document.getElementById("Relatorios-start").value;
+  const end = document.getElementById("Relatorios-end").value;
   const data = buildReportData(start, end);
 
   output.innerHTML = `
@@ -902,11 +902,11 @@ function renderMiniTable(headers, rows) {
 }
 
 function bindReports() {
-  document.getElementById("report-generate").addEventListener("click", renderReports);
+  document.getElementById("Relatorios-generate").addEventListener("click", renderReports);
 
-  document.getElementById("report-export-excel").addEventListener("click", () => {
-    const start = document.getElementById("report-start").value;
-    const end = document.getElementById("report-end").value;
+  document.getElementById("Relatorios-export-excel").addEventListener("click", () => {
+    const start = document.getElementById("Relatorios-start").value;
+    const end = document.getElementById("Relatorios-end").value;
     const data = buildReportData(start, end);
 
     const lines = [];
@@ -928,8 +928,8 @@ function bindReports() {
     downloadBlob(blob, `relatorio_financeiro_${todayISO()}.csv`);
   });
 
-  document.getElementById("report-export-pdf").addEventListener("click", () => {
-    const output = document.getElementById("report-output").innerHTML;
+  document.getElementById("Relatorios-export-pdf").addEventListener("click", () => {
+    const output = document.getElementById("Relatorios-output").innerHTML;
     const win = window.open("", "_blank");
     if (!win) return;
     win.document.write(`
@@ -968,18 +968,18 @@ function renderClosing() {
     .filter((s) => s.paymentMethod === "Cartao de debito" || s.paymentMethod === "Cartao de credito")
     .reduce((sum, s) => sum + s.total, 0);
 
-  document.getElementById("closing-date").textContent = shortDate(today);
-  document.getElementById("closing-sold").textContent = fmt.format(sold);
-  document.getElementById("closing-cash").textContent = fmt.format(cash);
-  document.getElementById("closing-card").textContent = fmt.format(card);
-  document.getElementById("closing-pix").textContent = fmt.format(pix);
-  document.getElementById("closing-expenses").textContent = fmt.format(todayExpenses);
-  document.getElementById("closing-profit").textContent = fmt.format(sold - todayExpenses);
+  document.getElementById("Fechamento-date").textContent = shortDate(today);
+  document.getElementById("Fechamento-sold").textContent = fmt.format(sold);
+  document.getElementById("Fechamento-cash").textContent = fmt.format(cash);
+  document.getElementById("Fechamento-card").textContent = fmt.format(card);
+  document.getElementById("Fechamento-pix").textContent = fmt.format(pix);
+  document.getElementById("Fechamento-expenses").textContent = fmt.format(todayExpenses);
+  document.getElementById("Fechamento-profit").textContent = fmt.format(sold - todayExpenses);
 }
 
 function bindClosing() {
-  document.getElementById("closing-print").addEventListener("click", () => {
-    const html = document.getElementById("view-closing").innerHTML;
+  document.getElementById("Fechamento-print").addEventListener("click", () => {
+    const html = document.getElementById("view-Fechamento").innerHTML;
     const win = window.open("", "_blank");
     if (!win) return;
     win.document.write(`<html><head><title>Fechamento</title></head><body>${html}</body></html>`);
@@ -1059,9 +1059,9 @@ async function restoreCloud() {
 
 }
 function bindSettings() {
-  document.getElementById("save-settings").addEventListener("click", () => {
-    state.settings.businessName = document.getElementById("settings-business-name").value.trim() || "Delicia Baiana";
-    state.settings.theme = document.getElementById("settings-theme").value;
+  document.getElementById("save-Configuracoes").addEventListener("click", () => {
+    state.settings.businessName = document.getElementById("Configuracoes-business-name").value.trim() || "Delicia Baiana";
+    state.settings.theme = document.getElementById("Configuracoes-theme").value;
     setTheme(state.settings.theme);
     saveState();
     notify("Configuracoes salvas.");
@@ -1147,8 +1147,8 @@ function renderUsers() {
 }
 
 function renderSettings() {
-  document.getElementById("settings-business-name").value = state.settings.businessName || "Delicia Baiana";
-  document.getElementById("settings-theme").value = state.settings.theme || "light";
+  document.getElementById("Configuracoes-business-name").value = state.settings.businessName || "Delicia Baiana";
+  document.getElementById("Configuracoes-theme").value = state.settings.theme || "light";
   renderUsers();
 }
 
@@ -1166,7 +1166,7 @@ function downloadBlob(blob, filename) {
 function renderAll() {
   setTheme(state.settings.theme || "light");
   renderDashboard();
-  renderPDV();
+  renderpedidos();
   renderCashflow();
   renderProducts();
   renderReports();
@@ -1192,12 +1192,12 @@ function init(){
   const closeMenu = document.getElementById("closeMenu");
 
   function abrirMenu(){
-    sideMenu.classList.add("active");
+    sideMenu.classList.add("open");
     menuOverlay.classList.add("active");
   }
 
   function fecharMenu(){
-    sideMenu.classList.remove("active");
+    sideMenu.classList.remove("open");
     menuOverlay.classList.remove("active");
   }
 
@@ -1206,7 +1206,7 @@ if(closeMenu) closeMenu.addEventListener("click", fecharMenu);
 if(menuOverlay) menuOverlay.addEventListener("click", fecharMenu);
 
   bindAuth();
-  bindPDV();
+  bindPedidos();
   bindCashflow();
   bindProducts();
   bindReports();
@@ -1230,7 +1230,7 @@ if(menuOverlay) menuOverlay.addEventListener("click", fecharMenu);
   startAutoBackup();
 
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js")
+    navigator.serviceWorker.register("./service-worker.js")
       .then(() => console.log("Service Worker registrado"))
       .catch((err) => console.log("Erro:", err));
   }
@@ -1252,7 +1252,7 @@ if(menuOverlay) menuOverlay.addEventListener("click", fecharMenu);
   if(title) title.textContent = page;
 
   // fechar menu
-  sideMenu.classList.remove("active");
+  sideMenu.classList.remove("open");
   menuOverlay.classList.remove("active");
 
 }
@@ -1283,7 +1283,7 @@ async function enviarVendaParaPlanilha(sale){
   }
 
 }
-init();
+document.addEventListener("DOMContentLoaded", init);
 
 
 
