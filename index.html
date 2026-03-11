@@ -54,7 +54,7 @@
       <button id="menuBtn" class="menu-btn">☰</button>
         
         <div>
-          <h3 id="page-title">PDV</h3>
+          <h3 id="page-title">Dashboard</h3>
           <small id="datetime-now"></small>
         </div>
         
@@ -64,6 +64,45 @@
         </div>
         
       </header>
+
+      <section id="view-Dashboard" class="view">
+        <div class="metrics-grid">
+          <article class="metric card">
+            <h4>Faturamento do Dia</h4>
+            <p id="metric-day">R$ 0,00</p>
+          </article>
+          <article class="metric card">
+            <h4>Faturamento da Semana</h4>
+            <p id="metric-week">R$ 0,00</p>
+          </article>
+          <article class="metric card">
+            <h4>Faturamento do Mes</h4>
+            <p id="metric-month">R$ 0,00</p>
+          </article>
+          <article class="metric card">
+            <h4>Lucro Estimado</h4>
+            <p id="metric-profit">R$ 0,00</p>
+          </article>
+          <article class="metric card">
+            <h4>Despesas Totais</h4>
+            <p id="metric-expenses">R$ 0,00</p>
+          </article>
+        </div>
+        <div class="charts-grid">
+          <article class="card">
+            <h4>Vendas por Dia (7 dias)</h4>
+            <canvas id="sales-bar-chart" width="500" height="220"></canvas>
+          </article>
+          <article class="card">
+            <h4>Formas de Pagamento</h4>
+            <canvas id="payment-pie-chart" width="500" height="220"></canvas>
+          </article>
+          <article class="card">
+            <h4>Evolucao do Faturamento (30 dias)</h4>
+            <canvas id="revenue-line-chart" width="500" height="220"></canvas>
+          </article>
+        </div>
+      </section>
 
       <section id="view-Pedidos" class="view active">
         <div class="Pedidos-layout">
@@ -84,6 +123,7 @@
               </div>
             </div>
             <button id="Pedidos-add-item" class="btn btn-primary">Adicionar produto</button>
+            <div id="quick-Pedidos" class="quick-products"></div>
           </article>
           <article class="card">
             <h4>Carrinho</h4>
@@ -112,8 +152,8 @@
                 <select id="Pedidos-payment">
                   <option>Dinheiro</option>
                   <option>PIX</option>
-                  <option>Cartao de Debito</option>
-                  <option>Cartao de Credito</option>
+                  <option>Cartao de debito</option>
+                  <option>Cartao de credito</option>
                   <option>Outros</option>
                 </select>
               </div>
@@ -154,19 +194,19 @@
             <form id="Fluxo de caixa-form">
               <div class="form-row">
                 <label>Tipo</label>
-                <select id="Fluxo-type" required>
+                <select id="Fluxo de caixa-type" required>
                   <option value="entrada">Entrada</option>
                   <option value="saida">Saida</option>
                 </select>
               </div>
               <div class="form-row">
                 <label>Descricao</label>
-                <input id="Fluxo-description" type="text" required>
+                <input id="Fluxo de caixa-description" type="text" required>
               </div>
               <div class="form-grid">
                 <div class="form-row">
                   <label>Categoria</label>
-                  <select id="Fluxo-category" required>
+                  <select id="Fluxo de caixa-category" required>
                     <option>vendas</option>
                     <option>outras receitas</option>
                     <option>compras</option>
@@ -177,17 +217,17 @@
                 </div>
                 <div class="form-row">
                   <label>Valor</label>
-                  <input id="Fluxo-value" type="number" min="0" step="0.01" required>
+                  <input id="Fluxo de caixa-value" type="number" min="0" step="0.01" required>
                 </div>
               </div>
               <div class="form-grid">
                 <div class="form-row">
                   <label>Data</label>
-                  <input id="Fluxo-date" type="date" required>
+                  <input id="Fluxo de caixa-date" type="date" required>
                 </div>
                 <div class="form-row">
                   <label>Forma de pagamento</label>
-                  <select id="Fluxo-payment" required>
+                  <select id="Fluxo de caixa-payment" required>
                     <option>Dinheiro</option>
                     <option>PIX</option>
                     <option>Cartao de debito</option>
@@ -198,7 +238,7 @@
               </div>
               <div class="form-row">
                 <label>Observacoes</label>
-                <textarea id="Fluxo-notes" rows="3"></textarea>
+                <textarea id="Fluxo de caixa-notes" rows="3"></textarea>
               </div>
               <button class="btn btn-primary" type="submit">Salvar lancamento</button>
             </form>
@@ -339,62 +379,23 @@
           <button id="Fechamento-print" class="btn btn-accent">Imprimir fechamento</button>
         </article>
       </section>
-      
-      <section id="view-Dashboard" class="view">
-        <div class="metrics-grid">
-          <article class="metric card">
-            <h4>Faturamento do Dia</h4>
-            <p id="metric-day">R$ 0,00</p>
-          </article>
-          <article class="metric card">
-            <h4>Faturamento da Semana</h4>
-            <p id="metric-week">R$ 0,00</p>
-          </article>
-          <article class="metric card">
-            <h4>Faturamento do Mes</h4>
-            <p id="metric-month">R$ 0,00</p>
-          </article>
-          <article class="metric card">
-            <h4>Lucro Estimado</h4>
-            <p id="metric-profit">R$ 0,00</p>
-          </article>
-          <article class="metric card">
-            <h4>Despesas Totais</h4>
-            <p id="metric-expenses">R$ 0,00</p>
-          </article>
-        </div>
-        <div class="charts-grid">
-          <article class="card">
-            <h4>Vendas por Dia (7 dias)</h4>
-            <canvas id="sales-bar-chart" width="500" height="220"></canvas>
-          </article>
-          <article class="card">
-            <h4>Formas de Pagamento</h4>
-            <canvas id="payment-pie-chart" width="500" height="220"></canvas>
-          </article>
-          <article class="card">
-            <h4>Evolucao do Faturamento (30 dias)</h4>
-            <canvas id="revenue-line-chart" width="500" height="220"></canvas>
-          </article>
-        </div>
-      </section>
 
-      <section id="view-Configuração" class="view">
+      <section id="view-Configurações" class="view">
         <div class="two-cols">
           <article class="card">
             <h4>Configuracoes Gerais</h4>
             <div class="form-row">
               <label>Nome do negocio</label>
-              <input id="settings-business-name" type="text">
+              <input id="Configurações-business-name" type="text">
             </div>
             <div class="form-row">
               <label>Tema</label>
-              <select id="settings-theme">
+              <select id="Configurações-theme">
                 <option value="light">Claro</option>
                 <option value="dark">Escuro</option>
               </select>
             </div>
-            <button id="save-settings" class="btn btn-primary">Salvar configuracoes</button>
+            <button id="save-Configurações" class="btn btn-primary">Salvar configuracoes</button>
             <hr>
             <h5>Backup</h5>
             <div class="actions">
