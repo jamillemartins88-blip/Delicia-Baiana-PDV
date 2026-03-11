@@ -1283,6 +1283,16 @@ async function enviarVendaParaPlanilha(sale){
   }
 
 }
+
+function toggleMenu() {
+
+  const menu = document.getElementById("sideMenu");
+  const overlay = document.getElementById("menuOverlay");
+
+  menu.classList.toggle("open");
+  overlay.classList.toggle("active");
+
+}
 document.addEventListener("DOMContentLoaded", init);
 
 
