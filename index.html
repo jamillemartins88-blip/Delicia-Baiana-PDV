@@ -65,26 +65,25 @@
         
       </header>
 
-      <section id="view-pdv" class="view">
-        <div class="pdv-layout">
+      <section id="view-PDV" class="view active">
+        <div class="PDV-layout">
           <article class="card">
             <h4>Adicionar Itens</h4>
             <div class="form-row">
               <label>Produto</label>
-              <select id="pdv-product"></select>
+              <select id="PDV-product"></select>
             </div>
             <div class="form-grid">
               <div class="form-row">
                 <label>Quantidade</label>
-                <input id="pdv-qty" type="number" min="1" step="1" value="1">
+                <input id="PDV-qty" type="number" min="1" step="1" value="1">
               </div>
               <div class="form-row">
                 <label>Valor unitario (R$)</label>
-                <input id="pdv-unit-price" type="number" min="0" step="0.01">
+                <input id="PDV-unit-price" type="number" min="0" step="0.01">
               </div>
             </div>
-            <button id="pdv-add-item" class="btn btn-primary">Adicionar produto</button>
-            <div id="quick-products" class="quick-products"></div>
+            <button id="PDV-add-item" class="btn btn-primary">Adicionar produto</button>
           </article>
           <article class="card">
             <h4>Carrinho</h4>
@@ -99,35 +98,35 @@
                     <th></th>
                   </tr>
                 </thead>
-                <tbody id="pdv-cart-body"></tbody>
+                <tbody id="PDV-cart-body"></tbody>
               </table>
             </div>
             <div class="summary">
-              <p>Subtotal: <strong id="pdv-subtotal">R$ 0,00</strong></p>
-              <p>Taxa de entrega: <strong id="pdv-delivery-fee">R$ 0,00</strong></p>
-              <p>Total: <strong id="pdv-total">R$ 0,00</strong></p>
+              <p>Subtotal: <strong id="PDV-subtotal">R$ 0,00</strong></p>
+              <p>Taxa de entrega: <strong id="PDV-delivery-fee">R$ 0,00</strong></p>
+              <p>Total: <strong id="PDV-total">R$ 0,00</strong></p>
             </div>
             <div class="form-grid">
               <div class="form-row">
                 <label>Forma de pagamento</label>
-                <select id="pdv-payment">
+                <select id="PDV-payment">
                   <option>Dinheiro</option>
                   <option>PIX</option>
-                  <option>Cartao de debito</option>
-                  <option>Cartao de credito</option>
+                  <option>Cartao de Debito</option>
+                  <option>Cartao de Credito</option>
                   <option>Outros</option>
                 </select>
               </div>
               <div class="form-row">
                 <label>Forma de entrega</label>
-                <select id="pdv-delivery">
+                <select id="PDV-delivery">
                   <option>Delivery</option>
                   <option>Retirada</option>
                 </select>
               </div>
-              <div id="pdv-delivery-zone-row" class="form-row">
+              <div id="PDV-delivery-zone-row" class="form-row">
                 <label>Regiao da entrega</label>
-                <select id="pdv-delivery-zone">
+                <select id="PDV-delivery-zone">
                   <option>Cidade</option>
                   <option>Outros</option>
                 </select>
@@ -136,19 +135,19 @@
             <div class="form-grid">
               <div class="form-row">
                 <label>Valor recebido (R$)</label>
-                <input id="pdv-cash-received" type="number" min="0" step="0.01">
+                <input id="PDV-cash-received" type="number" min="0" step="0.01">
               </div>
               <div class="form-row">
                 <label>Troco</label>
-                <input id="pdv-change" type="text" readonly>
+                <input id="PDV-change" type="text" readonly>
               </div>
             </div>
-            <button id="pdv-finish-sale" class="btn btn-accent">Finalizar venda</button>
+            <button id="PDV-finish-sale" class="btn btn-accent">Finalizar venda</button>
           </article>
         </div>
       </section>
 
-      <section id="view-cashflow" class="view">
+      <section id="view-Fluxo de caixa" class="view">
         <div class="two-cols">
           <article class="card">
             <h4>Novo Lancamento</h4>
@@ -224,7 +223,7 @@
         </div>
       </section>
 
-      <section id="view-products" class="view">
+      <section id="view-Produtos" class="view">
         <div class="two-cols">
           <article class="card">
             <h4>Cadastro de Produto</h4>
@@ -282,7 +281,7 @@
         </div>
       </section>
 
-      <section id="view-reports" class="view">
+      <section id="view-Relatórios" class="view">
         <article class="card">
           <h4>Filtros</h4>
           <div class="form-grid">
@@ -307,7 +306,41 @@
         </article>
       </section>
 
-      <section id="view-dashboard" class="view active">
+      <section id="view-Fechamento" class="view">
+        <article class="card">
+          <h4>Fechamento de Caixa Diario</h4>
+          <p>Data: <strong id="closing-date"></strong></p>
+          <div class="metrics-grid">
+            <article class="metric card">
+              <h4>Total vendido</h4>
+              <p id="closing-sold">R$ 0,00</p>
+            </article>
+            <article class="metric card">
+              <h4>Total em dinheiro</h4>
+              <p id="closing-cash">R$ 0,00</p>
+            </article>
+            <article class="metric card">
+              <h4>Total em cartao</h4>
+              <p id="closing-card">R$ 0,00</p>
+            </article>
+            <article class="metric card">
+              <h4>Total em PIX</h4>
+              <p id="closing-pix">R$ 0,00</p>
+            </article>
+            <article class="metric card">
+              <h4>Total de despesas</h4>
+              <p id="closing-expenses">R$ 0,00</p>
+            </article>
+            <article class="metric card">
+              <h4>Lucro do dia</h4>
+              <p id="closing-profit">R$ 0,00</p>
+            </article>
+          </div>
+          <button id="closing-print" class="btn btn-accent">Imprimir fechamento</button>
+        </article>
+      </section>
+      
+      <section id="view-Dashboard" class="view">
         <div class="metrics-grid">
           <article class="metric card">
             <h4>Faturamento do Dia</h4>
@@ -344,40 +377,6 @@
             <canvas id="revenue-line-chart" width="500" height="220"></canvas>
           </article>
         </div>
-      </section>
-
-      <section id="view-closing" class="view">
-        <article class="card">
-          <h4>Fechamento de Caixa Diario</h4>
-          <p>Data: <strong id="closing-date"></strong></p>
-          <div class="metrics-grid">
-            <article class="metric card">
-              <h4>Total vendido</h4>
-              <p id="closing-sold">R$ 0,00</p>
-            </article>
-            <article class="metric card">
-              <h4>Total em dinheiro</h4>
-              <p id="closing-cash">R$ 0,00</p>
-            </article>
-            <article class="metric card">
-              <h4>Total em cartao</h4>
-              <p id="closing-card">R$ 0,00</p>
-            </article>
-            <article class="metric card">
-              <h4>Total em PIX</h4>
-              <p id="closing-pix">R$ 0,00</p>
-            </article>
-            <article class="metric card">
-              <h4>Total de despesas</h4>
-              <p id="closing-expenses">R$ 0,00</p>
-            </article>
-            <article class="metric card">
-              <h4>Lucro do dia</h4>
-              <p id="closing-profit">R$ 0,00</p>
-            </article>
-          </div>
-          <button id="closing-print" class="btn btn-accent">Imprimir fechamento</button>
-        </article>
       </section>
 
       <section id="view-settings" class="view">
