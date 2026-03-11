@@ -3,7 +3,7 @@
   --sun-orange: #f2cb5d;
   --cream: #fff8ec;
   --surface: #ffffff;
-  --bg: linear-gradient(120deg, #fff8ec 0%, #fff3d0 50%, #fffdf5 100%);
+  --bg: linear-gradient(120deg, #fff8ec 0%, #f2cb5d 50%, #770001 100%);
   --text: #2a1a12;
   --muted: #7d6655;
   --border: #ebd8c2;
@@ -41,7 +41,7 @@ body {
 }
 
 .sidebar {
-  background: linear-gradient(180deg, #770001 0%, #5a0001 100%);
+  background: linear-gradient(180deg, #770001 0%, #f2cb5d 100%);
   color: #fff7ef;
   padding: 20px 16px;
   display: flex;
@@ -281,7 +281,7 @@ td {
   display: grid;
   place-items: center;
   padding: 20px;
-  background: radial-gradient(circle at top right, #f2cb5d 0%, #fff8ec 48%, #ffe3cd 100%);
+  background: radial-gradient(circle at top right, #f2cb5d 0%, #f2cb5d 48%, #770001 100%);
 }
 
 .login-card {
@@ -413,6 +413,7 @@ button {
 .btn:active {
   transform: scale(0.97);
 }
+
 
 
 
