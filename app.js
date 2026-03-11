@@ -1000,30 +1000,58 @@ function runBackup(reason = "automatico") {
 // BACKUP NA NUVEM
 async function backupCloud() {
 
- const data = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  try {
 
- await setDoc(doc(db, "backup", "principal"), {
-   data: data,
-   updated: new Date()
- });
+    await window.setDoc(
+      window.doc(window.db, "backup", "principal"),
+      {
+        state: state,
+        updatedAt: new Date().toISOString()
+      }
+    );
 
- alert("Backup na nuvem realizado!");
+    alert("Backup na nuvem realizado com sucesso!");
+
+  } catch (error) {
+
+    console.error(error);
+    alert("Erro ao salvar backup na nuvem");
+
+  }
 
 }
 
 // RESTAURAR BACKUP
 async function restoreCloud() {
 
- const docSnap = await getDoc(doc(db, "backup", "principal"));
+  try {
 
- if (docSnap.exists()) {
+    const docSnap = await window.getDoc(
+      window.doc(window.db, "backup", "principal")
+    );
 
-   localStorage.setItem(STORAGE_KEY, JSON.stringify(docSnap.data().data));
+    if (docSnap.exists()) {
 
-   alert("Backup restaurado!");
-   location.reload();
+      state = docSnap.data().state;
 
- }
+      saveState();
+
+      alert("Backup restaurado!");
+
+      location.reload();
+
+    } else {
+
+      alert("Nenhum backup encontrado na nuvem");
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+    alert("Erro ao restaurar backup");
+
+  }
 
 }
 function bindSettings() {
