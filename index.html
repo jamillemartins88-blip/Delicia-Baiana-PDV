@@ -39,13 +39,13 @@
     <button id="closeMenu">✕</button>
   </div>
 
-  <a onclick="showPage('Pedido')">📝 Pedidos</a>
+  <a onclick="showPage('Pedidos')">📝 Pedidos</a>
   <a onclick="showPage('Fluxo de caixa')">💰 Fluxo de Caixa</a>
   <a onclick="showPage('Produtos')">🧆 Produtos</a>
   <a onclick="showPage('Relatórios')">📈 Relatórios</a>
   <a onclick="showPage('Fechamento')">🖥️ Fechamento</a>
   <a onclick="showPage('Dashboard')">📊 Dashboard</a>
-  <a onclick="showPage('Configuração')">⚙️ Configurações</a>
+  <a onclick="showPage('Configurações')">⚙️ Configurações</a>
   <a id="logout-btn">🚪 Sair</a>
 
 </div>  
@@ -223,38 +223,38 @@
         </div>
       </section>
 
-      <section id="view-Produto" class="view">
+      <section id="view-Produtos" class="view">
         <div class="two-cols">
           <article class="card">
             <h4>Cadastro de Produto</h4>
-            <form id="Produto-form">
-              <input id="Produto-id" type="hidden">
+            <form id="Produtos-form">
+              <input id="Produtos-id" type="hidden">
               <div class="form-row">
                 <label>Nome do produto</label>
-                <input id="Produto-name" type="text" required>
+                <input id="Produtos-name" type="text" required>
               </div>
               <div class="form-row">
                 <label>Categoria</label>
-                <input id="Produto-category" type="text" required>
+                <input id="Produtos-category" type="text" required>
               </div>
               <div class="form-grid">
                 <div class="form-row">
                   <label>Preco</label>
-                  <input id="Produto-price" type="number" min="0" step="0.01" required>
+                  <input id="Produtos-price" type="number" min="0" step="0.01" required>
                 </div>
                 <div class="form-row">
                   <label>Custo</label>
-                  <input id="Produto-cost" type="number" min="0" step="0.01" required>
+                  <input id="Produtos-cost" type="number" min="0" step="0.01" required>
                 </div>
               </div>
               <div class="form-row">
                 <label>Margem de lucro</label>
-                <input id="Produto-margin" type="text" readonly>
+                <input id="Produtos-margin" type="text" readonly>
               </div>
               <div class="form-row">
                 <label>Foto do produto</label>
-                <input id="Produto-photo" type="file" accept="image/*">
-                <img id="Produto-preview" class="product-preview hidden" alt="Preview">
+                <input id="Produtos-photo" type="file" accept="image/*">
+                <img id="Produtos-preview" class="product-preview hidden" alt="Preview">
               </div>
               <button class="btn btn-primary" type="submit">Salvar produto</button>
             </form>
@@ -274,35 +274,35 @@
                     <th>Acoes</th>
                   </tr>
                 </thead>
-                <tbody id="Produto-body"></tbody>
+                <tbody id="Produtos-body"></tbody>
               </table>
             </div>
           </article>
         </div>
       </section>
 
-      <section id="view-Relatório" class="view">
+      <section id="view-Relatórios" class="view">
         <article class="card">
           <h4>Filtros</h4>
           <div class="form-grid">
             <div class="form-row">
               <label>Data inicial</label>
-              <input id="Relatório-start" type="date">
+              <input id="Relatórios-start" type="date">
             </div>
             <div class="form-row">
               <label>Data final</label>
-              <input id="Relatório-end" type="date">
+              <input id="Relatórios-end" type="date">
             </div>
           </div>
           <div class="actions">
-            <button id="Relatório-generate" class="btn btn-primary">Gerar relatorios</button>
-            <button id="Relatório-export-excel" class="btn btn-secondary">Exportar Excel</button>
-            <button id="Relatório-export-pdf" class="btn btn-secondary">Exportar PDF</button>
+            <button id="Relatórios-generate" class="btn btn-primary">Gerar relatorios</button>
+            <button id="Relatórios-export-excel" class="btn btn-secondary">Exportar Excel</button>
+            <button id="Relatórios-export-pdf" class="btn btn-secondary">Exportar PDF</button>
           </div>
         </article>
         <article class="card">
           <h4>Resumo de Relatorios</h4>
-          <div id="Relatório-output"></div>
+          <div id="Relatórios-output"></div>
         </article>
       </section>
 
