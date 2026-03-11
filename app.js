@@ -9,12 +9,19 @@ let pdvCart = [];
 let productPhotoData = "";
 const DEFAULT_PRODUCTS = [
   { name: "Acaraje Tradicional", category: "Acaraje", price: 15, cost: 7 },
-  { name: "Pirao de mandioca Baiano", category: "Pirao", price: 22, cost: 0 },
-  { name: "Pirao de mandioca Nordestinho", category: "Pirao", price: 25, cost: 0 },
-  { name: "Pirao Nordestino", category: "Pirao", price: 25, cost: 0 },
-  { name: "Vatapa (200g)", category: "Encomendas", price: 35, cost: 0 },
-  { name: "Quiaba (200g)", category: "Encomendas", price: 35, cost: 0 },
-  { name: "Caruru (500g)", category: "Encomendas", price: 85, cost: 0 }
+  { name: "Barca de Acaraje (P)", category: "Acaraje", price: 45, cost: 15 },
+  { name: "10 Mini Acaraje", category: "Congelados", price: 20, cost: 5 },
+  { name: "Cuscuz Temperado", category: "Cuscuz", price: 12, cost: 5 },
+  { name: "Cuscuz Banana da Terra", category: "Cuscuz", price: 15, cost: 6 },
+  { name: "Cuscuz D'Casa", category: "Cuscuz", price: 18, cost: 8 },
+  { name: "Cuscuz Baiano", category: "Cuscuz", price: 20, cost: 10 },
+  { name: "Cuscuz Nordestino", category: "Cuscuz", price: 22, cost: 10 },
+  { name: "Pirão D'Casa", category: "Pirão de mandioca", price: 25, cost: 9 },
+  { name: "Pirão Baiano", category: "Pirão de mandioca", price: 22, cost: 10 },
+  { name: "Pirão Nordestinho", category: "Pirão de mandioca", price: 25, cost: 12 },
+  { name: "Vatapá (200g)", category: "Encomendas", price: 35, cost: 15 },
+  { name: "Quiaba (200g)", category: "Encomendas", price: 35, cost: 15 },
+  { name: "Caruru (500g)", category: "Encomendas", price: 85, cost: 30 }
 ];
 const DEFAULT_EXPENSES = [
   { description: "Quiabo (0,9 kg x R$11,41)", category: "compras", value: 10.27 },
