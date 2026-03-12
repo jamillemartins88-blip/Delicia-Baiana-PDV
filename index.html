@@ -437,62 +437,6 @@
       </section>
     </main>
   </div>
-
- <script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-
-import { 
-  getFirestore, 
-  window.db = db;
-window.collection = collection;
-window.addDoc = addDoc;
-window.getDocs = getDocs;
-window.doc = doc;
-window.getDoc = getDoc;
-window.setDoc = setDoc;
-window.updateDoc = updateDoc;
-window.deleteDoc = deleteDoc;
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDx26t161SRZD6FAk0pj2eB_1DcWBII3zQ",
-  authDomain: "delicias-baiana-pdv.firebaseapp.com",
-  projectId: "delicias-baiana-pdv",
-  storageBucket: "delicias-baiana-pdv.firebasestorage.app",
-  messagingSenderId: "692640981882",
-  appId: "1:692640981882:web:5b3a39fbc29f47735b2cc3",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-window.db = db;
-window.setDoc = setDoc;
-window.getDoc = getDoc;
-window.doc = doc;
-
-</script>
- 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="./app.js"></script>
-  <script>
-function toggleMenu(){
-
-const menu = document.getElementById("sideMenu");
-const overlay = document.getElementById("menuOverlay");
-
-if(menu) menu.classList.toggle("open");
-if(overlay) overlay.classList.toggle("active");
-
-}
-</script>
-
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./service-worker.js");
-}
-</script>
   
 <script src="./app.js"></script>
 </body>
