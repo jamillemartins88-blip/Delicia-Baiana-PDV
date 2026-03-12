@@ -1291,11 +1291,13 @@ function toggleMenu() {
   const menu = document.getElementById("sideMenu");
   const overlay = document.getElementById("menuOverlay");
 
+  if (!menu || !overlay) return;
+
   menu.classList.toggle("open");
   overlay.classList.toggle("active");
 
 }
-document.addEventListener("DOMContentLoaded", init);
+init();
 
 let deferredPrompt;
 
