@@ -998,64 +998,6 @@ function runBackup(reason = "automatico") {
   return snapshot;
 }
 
-
-// BACKUP NA NUVEM
-async function backupCloud() {
-
-  try {
-
-    await window.setDoc(
-      window.doc(window.db, "backup", "principal"),
-      {
-        state: state,
-        updatedAt: new Date().toISOString()
-      }
-    );
-
-    alert("Backup na nuvem realizado com sucesso!");
-
-  } catch (error) {
-
-    console.error(error);
-    alert("Erro ao salvar backup na nuvem");
-
-  }
-
-}
-
-// RESTAURAR BACKUP
-async function restoreCloud() {
-
-  try {
-
-    const docSnap = await window.getDoc(
-      window.doc(window.db, "backup", "principal")
-    );
-
-    if (docSnap.exists()) {
-
-      state = docSnap.data().state;
-
-      saveState();
-
-      alert("Backup restaurado!");
-
-      location.reload();
-
-    } else {
-
-      alert("Nenhum backup encontrado na nuvem");
-
-    }
-
-  } catch (error) {
-
-    console.error(error);
-    alert("Erro ao restaurar backup");
-
-  }
-
-}
 function bindSettings() {
   document.getElementById("save-settings").addEventListener("click", ()=>{
     state.settings.businessName = document.getElementById("settings-business-name").value.trim() || "Delicia Baiana";
@@ -1211,34 +1153,6 @@ function init(){
 
   startAutoBackup();
   registerServiceWorker();
-
-}
-
-async function enviarVendaParaPlanilha(sale){
-
-  try{
-
-    fetch(API_PLANILHA,{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
-        data: new Date().toLocaleString("pt-BR"),
-        itens: sale.items.map(i => i.name + " ("+i.qty+")").join(", "),
-        pagamento: sale.paymentMethod,
-        entrega: sale.deliveryMethod,
-        total: sale.total
-      })
-    });
-
-    console.log("Venda enviada para planilha");
-
-  }catch(error){
-
-    console.error("Erro ao enviar para planilha", error);
-
-  }
 
 }
 
