@@ -1,14 +1,14 @@
 ﻿const STORAGE_KEY = "delicias_baiana_pdv_v1";
 const SESSION_KEY = "delicias_baiana_session";
-
 const CLOUD_KEY = "delicias_baiana_cloud_mirror";
 
 const API_PLANILHA = "https://script.google.com/macros/s/AKfycbDM9wVhMGcPnpzVdqWoHpSt_5T1GodThTUywze_CqC2x93cMfkWxgKUdTZxcDDkfSpg/exec";
 
 const fmt = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
+let state = loadState();
 let session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
-let pedidosCart = [];
+let pdvCart = [];
 let productPhotoData = "";
 const DEFAULT_PRODUCTS = [
   { name: "Acaraje Tradicional", category: "Acaraje", price: 25, cost: 7 },
@@ -54,7 +54,6 @@ const DEFAULT_EXPENSES = [
   { description: "Anuncio Meta Ads", category: "custos operacionais", value: 130 }
 ];
 
-let state = loadState();
 function loadState() {
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) {
@@ -173,9 +172,7 @@ function setTheme(theme) {
 
 function updateOnlineStatus() {
   const status = document.getElementById("online-status");
-if (!status) return;
-
-status.textContent = navigator.onLine ? "Online" : "Offline";
+  status.textContent = navigator.onLine ? "Online" : "Offline";
   status.style.background = navigator.onLine ? "#a8f0c9" : "#f8e2a0";
 }
 
@@ -198,86 +195,73 @@ function showApp() {
   app.classList.remove("hidden");
   currentUser.textContent = session.name;
 }
-function logout(){
 
-  session = null;
-
-  localStorage.removeItem(SESSION_KEY);
-
-  showApp();
-
-}
 function bindAuth() {
-
-  const loginForm = document.getElementById("login-form");
-
-  if(loginForm){
-    loginForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const username = document.getElementById("login-username").value.trim();
-      const password = document.getElementById("login-password").value;
-
-      const user = state.users.find(
-        (u) => u.username === username && u.password === password
+  document.getElementById("login-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const username = document.getElementById("login-username").value.trim();
+    const password = document.getElementById("login-password").value;
+    const user = state.users.find(u) => u.username === username && u.password === password
       );
-
       const error = document.getElementById("login-error");
-
       if (!user) {
         error.textContent = "Usuario ou senha invalidos.";
         return;
       }
-
       session = { id: user.id, name: user.name, username: user.username };
-
       localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-
       error.textContent = "";
-
       showApp();
       renderAll();
-    });
-  }
-
-  const logoutBtn = document.getElementById("logout-btn");
-
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click",logout);
-}
-}
-
-function bindPedidos() {
-  const productSelect = document.getElementById("Pedidos-product");
-
-if(productSelect){
-  productSelect.addEventListener("change",(e)=>{
-
-    const product = state.products.find(p => p.id === e.target.value);
-
-    if(product){
-      document.getElementById("Pedidos-unit-price").value = product.price.toFixed(2);
-    }
-
+ });
+  
+document.getElementById("logout-btn").addEventListener("click", () => {
+    session = null;
+    localStorage.removeItem(SESSION_KEY);
+    showApp();
   });
 }
 
-  const addItemBtn = document.getElementById("Pedidos-add-item");
+function bindNavigation() {
+  const menu = document.getElementById("menu");
+  menu.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-view]");
+    if (!btn) return;
+    const view = btn.dataset.view;
+    document.querySelectorAll(".menu-item").forEach((item) => item.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
+    document.getElementById(`view-${view}`).classList.add("active");
+    document.getElementById("page-title").textContent = btn.textContent;
 
-if(addItemBtn){
-  addItemBtn.addEventListener("click",()=>{
+    if (view === "dashboard") renderDashboard();
+    if (view === "pdv") renderPDV();
+    if (view === "cashflow") renderCashflow();
+    if (view === "products") renderProducts();
+    if (view === "reports") renderReports();
+    if (view === "closing") renderClosing();
+    if (view === "settings") renderSettings();
+  });
+}
 
-    const productId = document.getElementById("Pedidos-product").value;
+function bindPDV() {
+  document.getElementById("pdv-product").addEventListener("change", (e) => {
+    const product = state.products.find((p) => p.id === e.target.value);
+    if (product) document.getElementById("pdv-unit-price").value = product.price.toFixed(2);
+  });
+
+  document.getElementById("pdv-add-item").addEventListener("click", () => {
+    const productId = document.getElementById("pdv-product").value;
     const product = state.products.find((p) => p.id === productId);
-    const qty = Number(document.getElementById("Pedidos-qty").value || 0);
-    const unitPrice = Number(document.getElementById("Pedidos-unit-price").value || 0);
+    const qty = Number(document.getElementById("pdv-qty").value || 0);
+    const unitPrice = Number(document.getElementById("pdv-unit-price").value || 0);
 
     if (!product || qty <= 0 || unitPrice < 0) {
       notify("Preencha produto, quantidade e valor corretamente.");
       return;
     }
 
-    pedidosCart.push({
+    pdvCart.push({
       id: crypto.randomUUID(),
       productId: product.id,
       name: product.name,
@@ -287,37 +271,32 @@ if(addItemBtn){
       cost: Number(product.cost || 0)
     });
 
-    document.getElementById("Pedidos-qty").value = "1";
+    document.getElementById("pdv-qty").value = "1";
     updatePedidosSummary();
     renderPedidosCart();
   });
-}
 
-  const cashReceived = document.getElementById("Pedidos-cash-received");
-
-if(cashReceived){
-  cashReceived.addEventListener("input", updatePedidosSummary);
-}
-  document.getElementById("Pedidos-payment").addEventListener("change", updatePedidosSummary);
-  document.getElementById("Pedidos-delivery").addEventListener("change", () => {
+document.getElementById("pdv-cash-received").addEventListener("input", updatePDVSummary);
+  document.getElementById("pdv-payment").addEventListener("change", updatePDVSummary);
+  document.getElementById("pdv-delivery").addEventListener("change", () => {
     toggleDeliveryZone();
-    updatePedidosSummary();
+    updatePDVSummary();
   });
-  document.getElementById("Pedidos-delivery-zone").addEventListener("change", updatePedidosSummary);
+  document.getElementById("pdv-delivery-zone").addEventListener("change", updatePDVSummary);
 
-  document.getElementById("Pedidos-finish-sale").addEventListener("click", ()=>{
-    if (!pedidosCart.length) {
+  document.getElementById("pdv-finish-sale").addEventListener("click", () => {
+    if (!pdvCart.length) {
       notify("Adicione itens no carrinho para finalizar a venda.");
       return;
     }
 
-    const paymentMethod = document.getElementById("Pedidos-payment").value;
-    const deliveryMethod = document.getElementById("Pedidos-delivery").value;
-    const deliveryZone = deliveryMethod === "Delivery" ? document.getElementById("Pedidos-delivery-zone").value : "Retirada";
-    const subtotal = pedidosCart.reduce((sum, item) => sum + item.total, 0);
+    const paymentMethod = document.getElementById("pdv-payment").value;
+    const deliveryMethod = document.getElementById("pdv-delivery").value;
+    const deliveryZone = deliveryMethod === "Delivery" ? document.getElementById("pdv-delivery-zone").value : "Retirada";
+    const subtotal = pdvCart.reduce((sum, item) => sum + item.total, 0);
     const deliveryFee = getDeliveryFee(deliveryMethod, deliveryZone);
     const total = subtotal + deliveryFee;
-    const cashReceived = Number(document.getElementById("Pedidos-cash-received").value || 0);
+    const cashReceived = Number(document.getElementById("pdv-cash-received").value || 0);
     const change = paymentMethod === "Dinheiro" ? Math.max(cashReceived - total, 0) : 0;
 
     if (paymentMethod === "Dinheiro" && cashReceived < total) {
@@ -327,7 +306,7 @@ if(cashReceived){
 
     const sale = {
       id: crypto.randomUUID(),
-      items: [...pedidosCart],
+      items: [...pdvCart],
       subtotal,
       deliveryFee,
       total,
@@ -347,10 +326,10 @@ if(cashReceived){
 
     printReceipt(sale);
 
-    pedidosCart = [];
-    document.getElementById("Pedidos-cash-received").value = "";
-    updatePedidosSummary();
-    renderPedidosCart();
+    pdvCart = [];
+    document.getElementById("pdv-cash-received").value = "";
+    updatePDVSummary();
+    renderPDVCart();
     renderDashboard();
     renderReports();
     renderClosing();
@@ -358,8 +337,8 @@ if(cashReceived){
   });
 }
 
-function renderpedidos() {
-  const select = document.getElementById("Pedidos-product");
+function renderPDV() {
+  const select = document.getElementById("pdv-product");
   const quick = document.getElementById("quick-products");
 
   select.innerHTML = "";
@@ -373,7 +352,7 @@ function renderpedidos() {
   const first = state.products[0];
   if (first) {
     select.value = first.id;
-    document.getElementById("Pedidos-unit-price").value = Number(first.price).toFixed(2);
+    document.getElementById("pdv-unit-price").value = Number(first.price).toFixed(2);
   }
 
   quick.innerHTML = "";
@@ -382,8 +361,7 @@ function renderpedidos() {
     btn.type = "button";
     btn.textContent = `${p.name} - ${fmt.format(p.price)}`;
     btn.addEventListener("click",()=>{
-
-      pedidosCart.push({
+     pdvCart.push({
         id: crypto.randomUUID(),
         productId: p.id,
         name: p.name,
@@ -399,15 +377,15 @@ function renderpedidos() {
   });
 
   toggleDeliveryZone();
-  renderPedidosCart();
-  updatePedidosSummary();
+  renderPDVCart();
+  updatePDVSummary();
 }
 
-function renderPedidosCart() {
-  const body = document.getElementById("Pedidos-cart-body");
+function renderPDVCart() {
+  const body = document.getElementById("pdv-cart-body");
   body.innerHTML = "";
 
-  pedidosCart.forEach((item) => {
+  pdvCart.forEach((item) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${item.name}</td>
@@ -421,9 +399,9 @@ function renderPedidosCart() {
 
   body.querySelectorAll("button[data-remove]").forEach((btn) => {
     btn.addEventListener("click", ()=>{
-     pedidosCart = pedidosCart.filter((item) => item.id !== btn.dataset.remove);
-      renderPedidosCart();
-      updatePedidosSummary();
+     pdvCart = pdvCart.filter((item) => item.id !== btn.dataset.remove);
+      renderPDVCart();
+      updatePDVSummary();
     });
   });
 }
@@ -435,26 +413,26 @@ function getDeliveryFee(deliveryMethod, deliveryZone) {
 }
 
 function toggleDeliveryZone() {
-  const deliveryMethod = document.getElementById("Pedidos-delivery")?.value || "Delivery";
-  const row = document.getElementById("Pedidos-delivery-zone-row");
+  const deliveryMethod = document.getElementById("pdv-delivery")?.value || "Delivery";
+  const row = document.getElementById("pdv-delivery-zone-row");
   if (!row) return;
   row.style.display = deliveryMethod === "Delivery" ? "grid" : "none";
 }
 
-function updatePedidosSummary() {
-  const subtotal = pedidosCart.reduce((sum, item) => sum + item.total, 0);
-  const deliveryMethod = document.getElementById("Pedidos-delivery")?.value || "Delivery";
-  const deliveryZone = document.getElementById("Pedidos-delivery-zone")?.value || "Cidade";
+function updatePDVSummary() {
+  const subtotal = pdvCart.reduce((sum, item) => sum + item.total, 0);
+  const deliveryMethod = document.getElementById("pdv-delivery")?.value || "Delivery";
+  const deliveryZone = document.getElementById("pdv-delivery-zone")?.value || "Cidade";
   const deliveryFee = getDeliveryFee(deliveryMethod, deliveryZone);
   const total = subtotal + deliveryFee;
-  const paymentMethod = document.getElementById("Pedidos-payment")?.value || "Dinheiro";
-  const cashReceived = Number(document.getElementById("Pedidos-cash-received")?.value || 0);
+  const paymentMethod = document.getElementById("pdv-payment")?.value || "Dinheiro";
+  const cashReceived = Number(document.getElementById("pdv-cash-received")?.value || 0);
   const change = paymentMethod === "Dinheiro" ? Math.max(cashReceived - total, 0) : 0;
 
-  document.getElementById("Pedidos-subtotal").textContent = fmt.format(subtotal);
-  document.getElementById("Pedidos-delivery-fee").textContent = fmt.format(deliveryFee);
-  document.getElementById("Pedidos-total").textContent = fmt.format(total);
-  document.getElementById("Pedidos-change").value = fmt.format(change);
+  document.getElementById("pdv-subtotal").textContent = fmt.format(subtotal);
+  document.getElementById("pdv-delivery-fee").textContent = fmt.format(deliveryFee);
+  document.getElementById("pdv-total").textContent = fmt.format(total);
+  document.getElementById("pdv-change").value = fmt.format(change);
 }
 
 function printReceipt(sale) {
@@ -499,20 +477,20 @@ function printReceipt(sale) {
 }
 
 function bindCashflow() {
-  document.getElementById("Fluxocaixa-date").value = todayISO();
+  document.getElementById("cash-date").value = todayISO();
 
-  document.getElementById("Fluxocaixa-form").addEventListener("submit", (e) => {
+  document.getElementById("cash-form").addEventListener("submit", (e) => {
     e.preventDefault();
 
     const entry = {
       id: crypto.randomUUID(),
-      type: document.getElementById("Fluxocaixa-type").value,
-      description: document.getElementById("Fluxocaixa-description").value.trim(),
-      category: document.getElementById("Fluxocaixa-category").value,
-      value: Number(document.getElementById("Fluxocaixa-value").value || 0),
-      date: document.getElementById("Fluxocaixa-date").value,
-      paymentMethod: document.getElementById("Fluxocaixa-payment").value,
-      notes: document.getElementById("Fluxocaixa-notes").value.trim(),
+      type: document.getElementById("cash-type").value,
+      description: document.getElementById("cash-description").value.trim(),
+      category: document.getElementById("cash-category").value,
+      value: Number(document.getElementById("cash-value").value || 0),
+      date: document.getElementById("cash-date").value,
+      paymentMethod: document.getElementById("cash-payment").value,
+      notes: document.getElementById("cash-notes").value.trim(),
       createdAt: new Date().toISOString()
     };
 
@@ -525,7 +503,7 @@ function bindCashflow() {
     saveState();
 
     e.target.reset();
-    document.getElementById("Fluxocaixa-date").value = todayISO();
+    document.getElementById("cash-date").value = todayISO();
     renderCashflow();
     renderDashboard();
     renderClosing();
@@ -534,7 +512,7 @@ function bindCashflow() {
 }
 
 function renderCashflow() {
-  const body = document.getElementById("Fluxocaixa-body");
+  const body = document.getElementById("cash-body");
   body.innerHTML = "";
   state.cashEntries.slice(0, 120).forEach((entry) => {
     const tr = document.createElement("tr");
@@ -550,40 +528,40 @@ function renderCashflow() {
 }
 
 function bindProducts() {
-  const photoInput = document.getElementById("Produtos-photo");
+  const photoInput = document.getElementById("product-photo");
   photoInput.addEventListener("change", () => {
     const file = photoInput.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
       productPhotoData = reader.result;
-      const preview = document.getElementById("Produtos-preview");
+      const preview = document.getElementById("products-preview");
       preview.src = String(productPhotoData);
       preview.classList.remove("hidden");
     };
     reader.readAsDataURL(file);
   });
 
-  const price = document.getElementById("Produtos-price");
-  const cost = document.getElementById("Produtos-cost");
+  const price = document.getElementById("products-price");
+  const cost = document.getElementById("products-cost");
 
   [price, cost].forEach((el) => {
     el.addEventListener("input", () => {
       const p = Number(price.value || 0);
       const c = Number(cost.value || 0);
       const margin = p > 0 ? ((p - c) / p) * 100 : 0;
-      document.getElementById("Produtos-margin").value = `${margin.toFixed(2)}%`;
+      document.getElementById("products-margin").value = `${margin.toFixed(2)}%`;
     });
   });
 
-  document.getElementById("Produtos-form").addEventListener("submit", (e) => {
+  document.getElementById("products-form").addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const id = document.getElementById("Produtos-id").value;
-    const name = document.getElementById("Produtos-name").value.trim();
-    const category = document.getElementById("Produtos-category").value.trim();
-    const productPrice = Number(document.getElementById("Produtos-price").value || 0);
-    const productCost = Number(document.getElementById("Produtos-cost").value || 0);
+    const id = document.getElementById("products-id").value;
+    const name = document.getElementById("products-name").value.trim();
+    const category = document.getElementById("products-category").value.trim();
+    const productPrice = Number(document.getElementById("products-price").value || 0);
+    const productCost = Number(document.getElementById("products-cost").value || 0);
     const margin = productPrice > 0 ? ((productPrice - productCost) / productPrice) * 100 : 0;
 
     if (!name || !category || productPrice <= 0) {
@@ -618,25 +596,25 @@ function bindProducts() {
     }
 
     saveState();
-    clearProdutosForm();
+    clearProductsForm();
     renderProducts();
-    renderpedidos();
+    renderPDV();
     renderDashboard();
     notify("Produto salvo com sucesso.");
   });
 }
-function clearProdutosForm() {
-  document.getElementById("Produtos-form").reset();
-  document.getElementById("Produtos-id").value = "";
-  document.getElementById("Produtos-margin").value = "";
-  const preview = document.getElementById("Produtos-preview");
+function clearProductsForm() {
+  document.getElementById("products-form").reset();
+  document.getElementById("products-id").value = "";
+  document.getElementById("products-margin").value = "";
+  const preview = document.getElementById("products-preview");
   preview.classList.add("hidden");
   preview.src = "";
   productPhotoData = "";
 }
 
 function renderProducts() {
-  const body = document.getElementById("Produtos-body");
+  const body = document.getElementById("products-body");
   body.innerHTML = "";
 
   state.products.forEach((product) => {
@@ -660,14 +638,14 @@ function renderProducts() {
     btn.addEventListener("click",()=>{
       const product = state.products.find((p) => p.id === btn.dataset.edit);
       if (!product) return;
-      document.getElementById("Produtos-id").value = product.id;
-      document.getElementById("Produtos-name").value = product.name;
-      document.getElementById("Produtos-category").value = product.category;
-      document.getElementById("Produtos-price").value = Number(product.price).toFixed(2);
-      document.getElementById("Produtos-cost").value = Number(product.cost).toFixed(2);
-      document.getElementById("Produtos-margin").value = `${Number(product.margin).toFixed(2)}%`;
+      document.getElementById("products-id").value = product.id;
+      document.getElementById("products-name").value = product.name;
+      document.getElementById("products-category").value = product.category;
+      document.getElementById("products-price").value = Number(product.price).toFixed(2);
+      document.getElementById("products-cost").value = Number(product.cost).toFixed(2);
+      document.getElementById("products-margin").value = `${Number(product.margin).toFixed(2)}%`;
       productPhotoData = product.photo || "";
-      const preview = document.getElementById("Produtos-preview");
+      const preview = document.getElementById("products-preview");
       if (product.photo) {
         preview.src = product.photo;
         preview.classList.remove("hidden");
@@ -684,7 +662,7 @@ function renderProducts() {
       state.products = state.products.filter((p) => p.id !== btn.dataset.delete);
       saveState();
       renderProducts();
-      renderpedidos();
+      renderPDV();
     });
   });
 }
@@ -884,9 +862,9 @@ function buildReportData(start, end) {
 }
 
 function renderReports() {
-  const output = document.getElementById("Relatorios-output");
-  const start = document.getElementById("Relatorios-start").value;
-  const end = document.getElementById("Relatorios-end").value;
+  const output = document.getElementById("report-output");
+  const start = document.getElementById("report-start").value;
+  const end = document.getElementById("report-end").value;
   const data = buildReportData(start, end);
 
   output.innerHTML = `
@@ -921,11 +899,11 @@ function renderMiniTable(headers, rows) {
 }
 
 function bindReports() {
-  document.getElementById("Relatorios-generate").addEventListener("click", renderReports);
+  document.getElementById("report-generate").addEventListener("click", renderReports);
 
-  document.getElementById("Relatorios-export-excel").addEventListener("click", ()=>{
-    const start = document.getElementById("Relatorios-start").value;
-    const end = document.getElementById("Relatorios-end").value;
+  document.getElementById("report-export-excel").addEventListener("click", ()=>{
+    const start = document.getElementById("report-start").value;
+    const end = document.getElementById("report-end").value;
     const data = buildReportData(start, end);
 
     const lines = [];
@@ -947,8 +925,8 @@ function bindReports() {
     downloadBlob(blob, `relatorio_financeiro_${todayISO()}.csv`);
   });
 
-  document.getElementById("Relatorios-export-pdf").addEventListener("click", ()=>{
-    const output = document.getElementById("Relatorios-output").innerHTML;
+  document.getElementById("report-export-pdf").addEventListener("click", ()=>{
+    const output = document.getElementById("report-output").innerHTML;
     const win = window.open("", "_blank");
     if (!win) return;
     win.document.write(`
@@ -987,18 +965,18 @@ function renderClosing() {
     .filter((s) => s.paymentMethod === "Cartao de debito" || s.paymentMethod === "Cartao de credito")
     .reduce((sum, s) => sum + s.total, 0);
 
-  document.getElementById("Fechamento-date").textContent = shortDate(today);
-  document.getElementById("Fechamento-sold").textContent = fmt.format(sold);
-  document.getElementById("Fechamento-cash").textContent = fmt.format(cash);
-  document.getElementById("Fechamento-card").textContent = fmt.format(card);
-  document.getElementById("Fechamento-pix").textContent = fmt.format(pix);
-  document.getElementById("Fechamento-expenses").textContent = fmt.format(todayExpenses);
-  document.getElementById("Fechamento-profit").textContent = fmt.format(sold - todayExpenses);
+  document.getElementById("closing-date").textContent = shortDate(today);
+  document.getElementById("closing-sold").textContent = fmt.format(sold);
+  document.getElementById("closing-cash").textContent = fmt.format(cash);
+  document.getElementById("closing-card").textContent = fmt.format(card);
+  document.getElementById("closing-pix").textContent = fmt.format(pix);
+  document.getElementById("closing-expenses").textContent = fmt.format(todayExpenses);
+  document.getElementById("closing-profit").textContent = fmt.format(sold - todayExpenses);
 }
 
 function bindClosing() {
-  document.getElementById("Fechamento-print").addEventListener("click", ()=>{
-    const html = document.getElementById("view-Fechamento").innerHTML;
+  document.getElementById("closing-print").addEventListener("click", ()=>{
+    const html = document.getElementById("view-closing").innerHTML;
     const win = window.open("", "_blank");
     if (!win) return;
     win.document.write(`<html><head><title>Fechamento</title></head><body>${html}</body></html>`);
@@ -1078,9 +1056,9 @@ async function restoreCloud() {
 
 }
 function bindSettings() {
-  document.getElementById("save-Configuracoes").addEventListener("click", ()=>{
-    state.settings.businessName = document.getElementById("Configuracoes-business-name").value.trim() || "Delicia Baiana";
-    state.settings.theme = document.getElementById("Configuracoes-theme").value;
+  document.getElementById("save-settings").addEventListener("click", ()=>{
+    state.settings.businessName = document.getElementById("settings-business-name").value.trim() || "Delicia Baiana";
+    state.settings.theme = document.getElementById("settings-theme").value;
     setTheme(state.settings.theme);
     saveState();
     notify("Configuracoes salvas.");
@@ -1166,8 +1144,8 @@ function renderUsers() {
 }
 
 function renderSettings() {
-  document.getElementById("Configuracoes-business-name").value = state.settings.businessName || "Delicia Baiana";
-  document.getElementById("Configuracoes-theme").value = state.settings.theme || "light";
+  document.getElementById("settings-business-name").value = state.settings.businessName || "Delicia Baiana";
+  document.getElementById("settings-theme").value = state.settings.theme || "light";
   renderUsers();
 }
 
@@ -1185,7 +1163,7 @@ function downloadBlob(blob, filename) {
 function renderAll() {
   setTheme(state.settings.theme || "light");
   renderDashboard();
-  renderpedidos();
+  renderPDV();
   renderCashflow();
   renderProducts();
   renderReports();
@@ -1203,29 +1181,9 @@ let sideMenu;
 let menuOverlay;
 
 function init(){
-
-  sideMenu = document.getElementById("sideMenu");
-  menuOverlay = document.getElementById("menuOverlay");
-
-  const menuBtn = document.getElementById("menuBtn");
-  const closeMenu = document.getElementById("closeMenu");
-
-  function abrirMenu(){
-    sideMenu.classList.add("open");
-    menuOverlay.classList.add("active");
-  }
-
-  function fecharMenu(){
-    sideMenu.classList.remove("open");
-    menuOverlay.classList.remove("active");
-  }
-
-if(menuBtn) menuBtn.addEventListener("click", abrirMenu);
-if(closeMenu) closeMenu.addEventListener("click", fecharMenu);
-if(menuOverlay) menuOverlay.addEventListener("click", fecharMenu);
-
   bindAuth();
-  bindPedidos();
+  bindNavigation();
+  bindPDV();
   bindCashflow();
   bindProducts();
   bindReports();
@@ -1237,9 +1195,7 @@ if(menuOverlay) menuOverlay.addEventListener("click", fecharMenu);
 
   updateClock();
   updateOnlineStatus();
-
   setInterval(updateClock, 1000);
-
   window.addEventListener("online", updateOnlineStatus);
   window.addEventListener("offline", updateOnlineStatus);
 
@@ -1247,34 +1203,10 @@ if(menuOverlay) menuOverlay.addEventListener("click", fecharMenu);
   if (session) renderAll();
 
   startAutoBackup();
-
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./service-worker.js")
-      .then(() => console.log("Service Worker registrado"))
-      .catch((err) => console.log("Erro:", err));
-  }
+  registerServiceWorker();
 
 }
- function showPage(page){
 
-  // esconder todas as telas
-  document.querySelectorAll(".view").forEach(v=>{
-    v.classList.remove("active");
-  });
-
-  // mostrar tela selecionada
-  const view = document.getElementById("view-" + page);
-  if(view) view.classList.add("active");
-
-  // atualizar título
-  const title = document.getElementById("page-title");
-  if(title) title.textContent = page;
-
-  // fechar menu
-  sideMenu.classList.remove("open");
-  menuOverlay.classList.remove("active");
-
-}
 async function enviarVendaParaPlanilha(sale){
 
   try{
@@ -1303,63 +1235,4 @@ async function enviarVendaParaPlanilha(sale){
 
 }
 
-function toggleMenu() {
-
-  const menu = document.getElementById("sideMenu");
-  const overlay = document.getElementById("menuOverlay");
-
-  if (!menu || !overlay) return;
-
-  menu.classList.toggle("open");
-  overlay.classList.toggle("active");
-
-}
 init();
-
-let deferredPrompt;
-
-window.addEventListener("beforeinstallprompt", (e) => {
-
-  e.preventDefault();
-
-  deferredPrompt = e;
-
-  console.log("App pode ser instalado");
-
-});
-
-const btnInstall = document.createElement("button");
-btnInstall.textContent = "📲 Instalar App";
-btnInstall.className = "btn btn-primary";
-btnInstall.style.position = "fixed";
-btnInstall.style.bottom = "20px";
-btnInstall.style.right = "20px";
-btnInstall.style.zIndex = "999";
-
-btnInstall.addEventListener("click", async () => {
-
-  if(!deferredPrompt) return;
-
-  deferredPrompt.prompt();
-
-  const choice = await deferredPrompt.userChoice;
-
-  if(choice.outcome === "accepted"){
-    console.log("App instalado");
-  }
-
-  deferredPrompt = null;
-  btnInstall.remove();
-
-});
-
-window.addEventListener("DOMContentLoaded", () => {
-  document.body.appendChild(btnInstall);
-});
-
-
-
-
-
-
-
