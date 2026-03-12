@@ -1309,6 +1309,32 @@ window.addEventListener("beforeinstallprompt", (e) => {
 
 });
 
+const btnInstall = document.createElement("button");
+btnInstall.textContent = "📲 Instalar App";
+btnInstall.className = "btn btn-primary";
+btnInstall.style.position = "fixed";
+btnInstall.style.bottom = "20px";
+btnInstall.style.right = "20px";
+btnInstall.style.zIndex = "999";
+
+btnInstall.addEventListener("click", async () => {
+
+  if(!deferredPrompt) return;
+
+  deferredPrompt.prompt();
+
+  const choice = await deferredPrompt.userChoice;
+
+  if(choice.outcome === "accepted"){
+    console.log("App instalado");
+  }
+
+  deferredPrompt = null;
+  btnInstall.remove();
+
+});
+
+document.body.appendChild(btnInstall);
 
 
 
