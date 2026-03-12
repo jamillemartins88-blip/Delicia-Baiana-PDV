@@ -31,7 +31,7 @@
 
 <div id="app" class="app hidden">
 
-<div id="menuOverlay" class="menu-overlay"></div>
+<div id="menuOverlay" class="menu-overlay" onclick="toggleMenu()"></div>
   
 <div id="sideMenu" class="side-menu">
   
@@ -489,19 +489,19 @@ window.doc = doc;
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="./app.js"></script>
 
-   <script>
+  <script>
 function toggleMenu(){
 
 const menu = document.getElementById("sideMenu");
 const overlay = document.getElementById("menuOverlay");
 
-menu.classList.toggle("open");
-overlay.classList.toggle("active");
+if(menu) menu.classList.toggle("open");
+if(overlay) overlay.classList.toggle("active");
 
 }
-    <script>
-      
-    <script>
+</script>
+
+<script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("./service-worker.js");
 }
