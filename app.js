@@ -11,7 +11,7 @@ let session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
 let pedidosCart = [];
 let productPhotoData = "";
 const DEFAULT_PRODUCTS = [
-  { name: "Acaraje Tradicional", category: "Acaraje", price: 15, cost: 7 },
+  { name: "Acaraje Tradicional", category: "Acaraje", price: 25, cost: 7 },
   { name: "Barca de Acaraje (P)", category: "Acaraje", price: 45, cost: 15 },
   { name: "10 Mini Acaraje", category: "Congelados", price: 20, cost: 5 },
   { name: "Cuscuz Temperado", category: "Cuscuz", price: 12, cost: 5 },
