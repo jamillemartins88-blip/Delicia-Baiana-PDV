@@ -234,7 +234,8 @@ function bindAuth() {
   const logoutBtn = document.getElementById("logout-btn");
 
   if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
+    logoutBtn.addEventListener("click",logout);
+}
 
       session = null;
 
@@ -253,7 +254,8 @@ function bindPedidos() {
     if (product) document.getElementById("Pedidos-unit-price").value = product.price.toFixed(2);
   });
 
-  document.getElementById("Pedidos-add-item").addEventListener("click", () => {
+  document.getElementById("Pedidos-add-item").addEventListener("click",logout);
+}
     const productId = document.getElementById("Pedidos-product").value;
     const product = state.products.find((p) => p.id === productId);
     const qty = Number(document.getElementById("Pedidos-qty").value || 0);
@@ -287,7 +289,8 @@ function bindPedidos() {
   });
   document.getElementById("Pedidos-delivery-zone").addEventListener("change", updatePedidosSummary);
 
-  document.getElementById("Pedidos-finish-sale").addEventListener("click", () => {
+  document.getElementById("Pedidos-finish-sale").addEventListener("click", logout);
+}
     if (!pedidosCart.length) {
       notify("Adicione itens no carrinho para finalizar a venda.");
       return;
@@ -363,7 +366,8 @@ function renderpedidos() {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.textContent = `${p.name} - ${fmt.format(p.price)}`;
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click",logout);
+}
       pedidosCart.push({
         id: crypto.randomUUID(),
         productId: p.id,
@@ -401,7 +405,8 @@ function renderPedidosCart() {
   });
 
   body.querySelectorAll("button[data-remove]").forEach((btn) => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", logout);
+}
      pedidosCart = pedidosCart.filter((item) => item.id !== btn.dataset.remove);
       renderPedidosCart();
       updatePedidosSummary();
@@ -638,7 +643,8 @@ function renderProducts() {
   });
 
   body.querySelectorAll("button[data-edit]").forEach((btn) => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click",logout);
+}
       const product = state.products.find((p) => p.id === btn.dataset.edit);
       if (!product) return;
       document.getElementById("Produtos-id").value = product.id;
@@ -659,7 +665,8 @@ function renderProducts() {
   });
 
   body.querySelectorAll("button[data-delete]").forEach((btn) => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", logout);
+}
       const hasSales = state.sales.some((sale) => sale.items.some((item) => item.productId === btn.dataset.delete));
       if (hasSales && !confirm("Este produto ja possui vendas registradas. Deseja excluir mesmo assim?")) return;
       state.products = state.products.filter((p) => p.id !== btn.dataset.delete);
@@ -904,7 +911,8 @@ function renderMiniTable(headers, rows) {
 function bindReports() {
   document.getElementById("Relatorios-generate").addEventListener("click", renderReports);
 
-  document.getElementById("Relatorios-export-excel").addEventListener("click", () => {
+  document.getElementById("Relatorios-export-excel").addEventListener("click", logout);
+}
     const start = document.getElementById("Relatorios-start").value;
     const end = document.getElementById("Relatorios-end").value;
     const data = buildReportData(start, end);
@@ -928,7 +936,8 @@ function bindReports() {
     downloadBlob(blob, `relatorio_financeiro_${todayISO()}.csv`);
   });
 
-  document.getElementById("Relatorios-export-pdf").addEventListener("click", () => {
+  document.getElementById("Relatorios-export-pdf").addEventListener("click", logout);
+}
     const output = document.getElementById("Relatorios-output").innerHTML;
     const win = window.open("", "_blank");
     if (!win) return;
@@ -978,7 +987,8 @@ function renderClosing() {
 }
 
 function bindClosing() {
-  document.getElementById("Fechamento-print").addEventListener("click", () => {
+  document.getElementById("Fechamento-print").addEventListener("click", logout);
+}
     const html = document.getElementById("view-Fechamento").innerHTML;
     const win = window.open("", "_blank");
     if (!win) return;
@@ -1059,7 +1069,8 @@ async function restoreCloud() {
 
 }
 function bindSettings() {
-  document.getElementById("save-Configuracoes").addEventListener("click", () => {
+  document.getElementById("save-Configuracoes").addEventListener("click", logout);
+}
     state.settings.businessName = document.getElementById("Configuracoes-business-name").value.trim() || "Delicia Baiana";
     state.settings.theme = document.getElementById("Configuracoes-theme").value;
     setTheme(state.settings.theme);
@@ -1067,12 +1078,14 @@ function bindSettings() {
     notify("Configuracoes salvas.");
   });
 
-  document.getElementById("backup-now").addEventListener("click", () => {
+  document.getElementById("backup-now").addEventListener("click", logout);
+}
     runBackup("manual");
     notify("Backup gerado com sucesso.");
   });
 
-  document.getElementById("download-backup").addEventListener("click", () => {
+  document.getElementById("download-backup").addEventListener("click", logout);
+}
     const payload = JSON.stringify({ exportedAt: new Date().toISOString(), state }, null, 2);
     const blob = new Blob([payload], { type: "application/json" });
     downloadBlob(blob, `backup_delicia_baiana_${todayISO()}.json`);
@@ -1097,12 +1110,14 @@ function bindSettings() {
     reader.readAsText(file);
   });
 
-  document.getElementById("cloud-sync-up").addEventListener("click", () => {
+  document.getElementById("cloud-sync-up").addEventListener("click", logout);
+}
     localStorage.setItem(CLOUD_KEY, JSON.stringify({ syncedAt: new Date().toISOString(), state }));
     notify("Dados enviados para nuvem (espelho local).");
   });
 
-  document.getElementById("cloud-sync-down").addEventListener("click", () => {
+  document.getElementById("cloud-sync-down").addEventListener("click", logout);
+}
     const cloud = localStorage.getItem(CLOUD_KEY);
     if (!cloud) {
       notify("Nenhum dado encontrado na nuvem.");
