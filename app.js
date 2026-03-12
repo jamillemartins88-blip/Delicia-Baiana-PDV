@@ -248,12 +248,24 @@ function bindAuth() {
 }
 
 function bindPedidos() {
-  document.getElementById("Pedidos-product").addEventListener("change", (e) => {
-    const product = state.products.find((p) => p.id === e.target.value);
-    if (product) document.getElementById("Pedidos-unit-price").value = product.price.toFixed(2);
-  });
+  const productSelect = document.getElementById("Pedidos-product");
 
-  document.getElementById("Pedidos-add-item").addEventListener("click",()=>{
+if(productSelect){
+  productSelect.addEventListener("change",(e)=>{
+
+    const product = state.products.find(p => p.id === e.target.value);
+
+    if(product){
+      document.getElementById("Pedidos-unit-price").value = product.price.toFixed(2);
+    }
+
+  });
+}
+
+  const addItemBtn = document.getElementById("Pedidos-add-item");
+
+if(addItemBtn){
+  addItemBtn.addEventListener("click",()=>{
 
     const productId = document.getElementById("Pedidos-product").value;
     const product = state.products.find((p) => p.id === productId);
@@ -279,8 +291,13 @@ function bindPedidos() {
     updatePedidosSummary();
     renderPedidosCart();
   });
+}
 
-  document.getElementById("Pedidos-cash-received").addEventListener("input", updatePedidosSummary);
+  const cashReceived = document.getElementById("Pedidos-cash-received");
+
+if(cashReceived){
+  cashReceived.addEventListener("input", updatePedidosSummary);
+}
   document.getElementById("Pedidos-payment").addEventListener("change", updatePedidosSummary);
   document.getElementById("Pedidos-delivery").addEventListener("change", () => {
     toggleDeliveryZone();
@@ -1262,7 +1279,7 @@ async function enviarVendaParaPlanilha(sale){
 
   try{
 
-    await fetch(API_PLANILHA,{
+    fetch(API_PLANILHA,{
       method:"POST",
       headers:{
         "Content-Type":"application/json"
@@ -1336,8 +1353,9 @@ btnInstall.addEventListener("click", async () => {
 
 });
 
-document.body.appendChild(btnInstall);
-
+window.addEventListener("DOMContentLoaded", () => {
+  document.body.appendChild(btnInstall);
+});
 
 
 
