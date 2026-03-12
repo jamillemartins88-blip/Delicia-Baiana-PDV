@@ -1,5 +1,6 @@
 ﻿const STORAGE_KEY = "delicias_baiana_pdv_v1";
 const SESSION_KEY = "delicias_baiana_session";
+
 const CLOUD_KEY = "delicias_baiana_cloud_mirror";
 
 const API_PLANILHA = "https://script.google.com/macros/s/AKfycbDM9wVhMGcPnpzVdqWoHpSt_5T1GodThTUywze_CqC2x93cMfkWxgKUdTZxcDDkfSpg/exec";
@@ -197,7 +198,15 @@ function showApp() {
   app.classList.remove("hidden");
   currentUser.textContent = session.name;
 }
+function logout(){
 
+  session = null;
+
+  localStorage.removeItem(SESSION_KEY);
+
+  showApp();
+
+}
 function bindAuth() {
 
   const loginForm = document.getElementById("login-form");
@@ -236,16 +245,6 @@ function bindAuth() {
   if (logoutBtn) {
     logoutBtn.addEventListener("click",logout);
 }
-
-      session = null;
-
-      localStorage.removeItem(SESSION_KEY);
-
-      showApp();
-
-    });
-  }
-
 }
 
 function bindPedidos() {
@@ -254,8 +253,8 @@ function bindPedidos() {
     if (product) document.getElementById("Pedidos-unit-price").value = product.price.toFixed(2);
   });
 
-  document.getElementById("Pedidos-add-item").addEventListener("click",logout);
-}
+  document.getElementById("Pedidos-add-item").addEventListener("click",()=>{
+
     const productId = document.getElementById("Pedidos-product").value;
     const product = state.products.find((p) => p.id === productId);
     const qty = Number(document.getElementById("Pedidos-qty").value || 0);
@@ -289,8 +288,7 @@ function bindPedidos() {
   });
   document.getElementById("Pedidos-delivery-zone").addEventListener("change", updatePedidosSummary);
 
-  document.getElementById("Pedidos-finish-sale").addEventListener("click", logout);
-}
+  document.getElementById("Pedidos-finish-sale").addEventListener("click", ()=>{
     if (!pedidosCart.length) {
       notify("Adicione itens no carrinho para finalizar a venda.");
       return;
@@ -366,8 +364,8 @@ function renderpedidos() {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.textContent = `${p.name} - ${fmt.format(p.price)}`;
-    btn.addEventListener("click",logout);
-}
+    btn.addEventListener("click",()=>{
+
       pedidosCart.push({
         id: crypto.randomUUID(),
         productId: p.id,
@@ -405,8 +403,7 @@ function renderPedidosCart() {
   });
 
   body.querySelectorAll("button[data-remove]").forEach((btn) => {
-    btn.addEventListener("click", logout);
-}
+    btn.addEventListener("click", ()=>{
      pedidosCart = pedidosCart.filter((item) => item.id !== btn.dataset.remove);
       renderPedidosCart();
       updatePedidosSummary();
@@ -643,8 +640,7 @@ function renderProducts() {
   });
 
   body.querySelectorAll("button[data-edit]").forEach((btn) => {
-    btn.addEventListener("click",logout);
-}
+    btn.addEventListener("click",()=>{
       const product = state.products.find((p) => p.id === btn.dataset.edit);
       if (!product) return;
       document.getElementById("Produtos-id").value = product.id;
@@ -665,8 +661,7 @@ function renderProducts() {
   });
 
   body.querySelectorAll("button[data-delete]").forEach((btn) => {
-    btn.addEventListener("click", logout);
-}
+    btn.addEventListener("click", ()=>{
       const hasSales = state.sales.some((sale) => sale.items.some((item) => item.productId === btn.dataset.delete));
       if (hasSales && !confirm("Este produto ja possui vendas registradas. Deseja excluir mesmo assim?")) return;
       state.products = state.products.filter((p) => p.id !== btn.dataset.delete);
@@ -911,8 +906,7 @@ function renderMiniTable(headers, rows) {
 function bindReports() {
   document.getElementById("Relatorios-generate").addEventListener("click", renderReports);
 
-  document.getElementById("Relatorios-export-excel").addEventListener("click", logout);
-}
+  document.getElementById("Relatorios-export-excel").addEventListener("click", ()=>{
     const start = document.getElementById("Relatorios-start").value;
     const end = document.getElementById("Relatorios-end").value;
     const data = buildReportData(start, end);
@@ -936,8 +930,7 @@ function bindReports() {
     downloadBlob(blob, `relatorio_financeiro_${todayISO()}.csv`);
   });
 
-  document.getElementById("Relatorios-export-pdf").addEventListener("click", logout);
-}
+  document.getElementById("Relatorios-export-pdf").addEventListener("click", ()=>{
     const output = document.getElementById("Relatorios-output").innerHTML;
     const win = window.open("", "_blank");
     if (!win) return;
@@ -987,8 +980,7 @@ function renderClosing() {
 }
 
 function bindClosing() {
-  document.getElementById("Fechamento-print").addEventListener("click", logout);
-}
+  document.getElementById("Fechamento-print").addEventListener("click", ()=>{
     const html = document.getElementById("view-Fechamento").innerHTML;
     const win = window.open("", "_blank");
     if (!win) return;
@@ -1069,8 +1061,7 @@ async function restoreCloud() {
 
 }
 function bindSettings() {
-  document.getElementById("save-Configuracoes").addEventListener("click", logout);
-}
+  document.getElementById("save-Configuracoes").addEventListener("click", ()=>{
     state.settings.businessName = document.getElementById("Configuracoes-business-name").value.trim() || "Delicia Baiana";
     state.settings.theme = document.getElementById("Configuracoes-theme").value;
     setTheme(state.settings.theme);
@@ -1078,14 +1069,12 @@ function bindSettings() {
     notify("Configuracoes salvas.");
   });
 
-  document.getElementById("backup-now").addEventListener("click", logout);
-}
+  document.getElementById("backup-now").addEventListener("click", ()=>{
     runBackup("manual");
     notify("Backup gerado com sucesso.");
   });
 
-  document.getElementById("download-backup").addEventListener("click", logout);
-}
+  document.getElementById("download-backup").addEventListener("click",()=>{
     const payload = JSON.stringify({ exportedAt: new Date().toISOString(), state }, null, 2);
     const blob = new Blob([payload], { type: "application/json" });
     downloadBlob(blob, `backup_delicia_baiana_${todayISO()}.json`);
@@ -1110,14 +1099,12 @@ function bindSettings() {
     reader.readAsText(file);
   });
 
-  document.getElementById("cloud-sync-up").addEventListener("click", logout);
-}
+  document.getElementById("cloud-sync-up").addEventListener("click", ()=>{
     localStorage.setItem(CLOUD_KEY, JSON.stringify({ syncedAt: new Date().toISOString(), state }));
     notify("Dados enviados para nuvem (espelho local).");
   });
 
-  document.getElementById("cloud-sync-down").addEventListener("click", logout);
-}
+  document.getElementById("cloud-sync-down").addEventListener("click", ()=>{
     const cloud = localStorage.getItem(CLOUD_KEY);
     if (!cloud) {
       notify("Nenhum dado encontrado na nuvem.");
@@ -1310,8 +1297,17 @@ function toggleMenu() {
 }
 document.addEventListener("DOMContentLoaded", init);
 
+let deferredPrompt;
 
+window.addEventListener("beforeinstallprompt", (e) => {
 
+  e.preventDefault();
+
+  deferredPrompt = e;
+
+  console.log("App pode ser instalado");
+
+});
 
 
 
