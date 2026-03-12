@@ -998,6 +998,7 @@ function runBackup(reason = "automatico") {
   return snapshot;
 }
 
+
 // BACKUP NA NUVEM
 async function backupCloud() {
 
@@ -1171,14 +1172,20 @@ function renderAll() {
   renderSettings();
 }
 
+function registerServiceWorker() {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js").catch(() => {
+      // falha silenciosa para nao bloquear o uso
+    });
+  }
+}
+
 function startAutoBackup() {
   const everyMs = Math.max(Number(state.settings.autoBackupMinutes || 5), 1) * 60 * 1000;
   setInterval(() => {
     runBackup("automatico");
   }, everyMs);
 }
-let sideMenu;
-let menuOverlay;
 
 function init(){
   bindAuth();
