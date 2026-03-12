@@ -36,33 +36,24 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
 
-  if (event.request.method !== "GET") return;
+  if (!event.request.url.startsWith("http")) return;
 
   event.respondWith(
     caches.match(event.request).then((cached) => {
 
-      if (cached) {
-        return cached;
-      }
+      if (cached) return cached;
 
-      return fetch(event.request)
-        .then((response) => {
+      return fetch(event.request).then((response) => {
 
-          if (!response || response.status !== 200) {
-            return response;
-          }
+        const clone = response.clone();
 
-          const responseClone = response.clone();
-
-          caches.open(CACHE).then((cache) => {
-            cache.put(event.request, responseClone);
-          });
-
-          return response;
-        })
-        .catch(() => {
-          return caches.match("/index.html");
+        caches.open(CACHE).then((cache) => {
+          cache.put(event.request, clone);
         });
+
+        return response;
+
+      }).catch(() => caches.match("/index.html"));
 
     })
   );
