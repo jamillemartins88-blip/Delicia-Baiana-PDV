@@ -1,4 +1,4 @@
-﻿const STORAGE_KEY = "delicias_baiana_pdv_v1";
+const STORAGE_KEY = "delicias_baiana_pdv_v1";
 const SESSION_KEY = "delicias_baiana_session";
 const CLOUD_KEY = "delicias_baiana_cloud_mirror";
 
@@ -11,7 +11,7 @@ let session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
 let pdvCart = [];
 let productPhotoData = "";
 const DEFAULT_PRODUCTS = [
-  { name: "Acaraje Tradicional", category: "Acaraje", price: 25, cost: 7 },
+  { name: "Acaraje Tradicional", category: "Acaraje", price: 15, cost: 7 },
   { name: "Barca de Acaraje (P)", category: "Acaraje", price: 45, cost: 15 },
   { name: "10 Mini Acaraje", category: "Congelados", price: 20, cost: 5 },
   { name: "Cuscuz Temperado", category: "Cuscuz", price: 12, cost: 5 },
@@ -195,27 +195,34 @@ function showApp() {
   app.classList.remove("hidden");
   currentUser.textContent = session.name;
 }
+function logout(){
 
+  session = null;
+
+  localStorage.removeItem(SESSION_KEY);
+
+  showApp();
+
+}
 function bindAuth() {
   document.getElementById("login-form").addEventListener("submit", (e) => {
     e.preventDefault();
     const username = document.getElementById("login-username").value.trim();
     const password = document.getElementById("login-password").value;
-    const user = state.users.find(u) => u.username === username && u.password === password
-      );
-      const error = document.getElementById("login-error");
-      if (!user) {
-        error.textContent = "Usuario ou senha invalidos.";
-        return;
-      }
-      session = { id: user.id, name: user.name, username: user.username };
-      localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-      error.textContent = "";
-      showApp();
-      renderAll();
- });
-  
-document.getElementById("logout-btn").addEventListener("click", () => {
+    const user = state.users.find((u) => u.username === username && u.password === password);
+    const error = document.getElementById("login-error");
+    if (!user) {
+      error.textContent = "Usuario ou senha invalidos.";
+      return;
+    }
+    session = { id: user.id, name: user.name, username: user.username };
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    error.textContent = "";
+    showApp();
+    renderAll();
+  });
+
+   document.getElementById("logout-btn").addEventListener("click", () => {
     session = null;
     localStorage.removeItem(SESSION_KEY);
     showApp();
@@ -247,10 +254,10 @@ function bindNavigation() {
 function bindPDV() {
   document.getElementById("pdv-product").addEventListener("change", (e) => {
     const product = state.products.find((p) => p.id === e.target.value);
-    if (product) document.getElementById("pdv-unit-price").value = product.price.toFixed(2);
+    if (product) document.getElementById("Pedidos-unit-price").value = product.price.toFixed(2);
   });
 
-  document.getElementById("pdv-add-item").addEventListener("click", () => {
+  document.getElementById("pdv-add-item").addEventListener("click",()=>{
     const productId = document.getElementById("pdv-product").value;
     const product = state.products.find((p) => p.id === productId);
     const qty = Number(document.getElementById("pdv-qty").value || 0);
@@ -273,18 +280,18 @@ function bindPDV() {
 
     document.getElementById("pdv-qty").value = "1";
     updatePedidosSummary();
-    renderPedidosCart();
+    renderPDVCart();
   });
 
-document.getElementById("pdv-cash-received").addEventListener("input", updatePDVSummary);
-  document.getElementById("pdv-payment").addEventListener("change", updatePDVSummary);
+  document.getElementById("pdv-cash-received").addEventListener("input", updatepdvSummary);
+  document.getElementById("pdv-payment").addEventListener("change", updatepdvSummary);
   document.getElementById("pdv-delivery").addEventListener("change", () => {
     toggleDeliveryZone();
-    updatePDVSummary();
+    updatepdvSummary();
   });
-  document.getElementById("pdv-delivery-zone").addEventListener("change", updatePDVSummary);
+  document.getElementById("pdv-delivery-zone").addEventListener("change", updatepdvSummary);
 
-  document.getElementById("pdv-finish-sale").addEventListener("click", () => {
+  document.getElementById("pdv-finish-sale").addEventListener("click", ()=>{
     if (!pdvCart.length) {
       notify("Adicione itens no carrinho para finalizar a venda.");
       return;
@@ -306,7 +313,7 @@ document.getElementById("pdv-cash-received").addEventListener("input", updatePDV
 
     const sale = {
       id: crypto.randomUUID(),
-      items: [...pdvCart],
+      items: [...pedidosCart],
       subtotal,
       deliveryFee,
       total,
@@ -361,7 +368,8 @@ function renderPDV() {
     btn.type = "button";
     btn.textContent = `${p.name} - ${fmt.format(p.price)}`;
     btn.addEventListener("click",()=>{
-     pdvCart.push({
+
+      pdvCart.push({
         id: crypto.randomUUID(),
         productId: p.id,
         name: p.name,
@@ -370,8 +378,8 @@ function renderPDV() {
         total: Number(p.price),
         cost: Number(p.cost || 0)
       });
-      renderPedidosCart();
-      updatePedidosSummary();
+      renderPDVCart();
+      updatePDVSummary();
     });
     quick.appendChild(btn);
   });
@@ -479,7 +487,7 @@ function printReceipt(sale) {
 function bindCashflow() {
   document.getElementById("cash-date").value = todayISO();
 
-  document.getElementById("cash-form").addEventListener("submit", (e) => {
+  document.getElementById("cashflow-form").addEventListener("submit", (e) => {
     e.preventDefault();
 
     const entry = {
@@ -512,7 +520,7 @@ function bindCashflow() {
 }
 
 function renderCashflow() {
-  const body = document.getElementById("cash-body");
+  const body = document.getElementById("cashflow-body");
   body.innerHTML = "";
   state.cashEntries.slice(0, 120).forEach((entry) => {
     const tr = document.createElement("tr");
@@ -528,40 +536,40 @@ function renderCashflow() {
 }
 
 function bindProducts() {
-  const photoInput = document.getElementById("product-photo");
+  const photoInput = document.getElementById("Produtos-photo");
   photoInput.addEventListener("change", () => {
     const file = photoInput.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
       productPhotoData = reader.result;
-      const preview = document.getElementById("products-preview");
+      const preview = document.getElementById("Produtos-preview");
       preview.src = String(productPhotoData);
       preview.classList.remove("hidden");
     };
     reader.readAsDataURL(file);
   });
 
-  const price = document.getElementById("products-price");
-  const cost = document.getElementById("products-cost");
+  const price = document.getElementById("product-price");
+  const cost = document.getElementById("product-cost");
 
   [price, cost].forEach((el) => {
     el.addEventListener("input", () => {
       const p = Number(price.value || 0);
       const c = Number(cost.value || 0);
       const margin = p > 0 ? ((p - c) / p) * 100 : 0;
-      document.getElementById("products-margin").value = `${margin.toFixed(2)}%`;
+      document.getElementById("product-margin").value = `${margin.toFixed(2)}%`;
     });
   });
 
-  document.getElementById("products-form").addEventListener("submit", (e) => {
+  document.getElementById("product-form").addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const id = document.getElementById("products-id").value;
-    const name = document.getElementById("products-name").value.trim();
-    const category = document.getElementById("products-category").value.trim();
-    const productPrice = Number(document.getElementById("products-price").value || 0);
-    const productCost = Number(document.getElementById("products-cost").value || 0);
+    const id = document.getElementById("product-id").value;
+    const name = document.getElementById("product-name").value.trim();
+    const category = document.getElementById("product-category").value.trim();
+    const productPrice = Number(document.getElementById("product-price").value || 0);
+    const productCost = Number(document.getElementById("product-cost").value || 0);
     const margin = productPrice > 0 ? ((productPrice - productCost) / productPrice) * 100 : 0;
 
     if (!name || !category || productPrice <= 0) {
@@ -596,25 +604,25 @@ function bindProducts() {
     }
 
     saveState();
-    clearProductsForm();
+    clearproductForm();
     renderProducts();
     renderPDV();
     renderDashboard();
     notify("Produto salvo com sucesso.");
   });
 }
-function clearProductsForm() {
-  document.getElementById("products-form").reset();
-  document.getElementById("products-id").value = "";
-  document.getElementById("products-margin").value = "";
-  const preview = document.getElementById("products-preview");
+function clearproductForm() {
+  document.getElementById("product-form").reset();
+  document.getElementById("product-id").value = "";
+  document.getElementById("product-margin").value = "";
+  const preview = document.getElementById("product-preview");
   preview.classList.add("hidden");
   preview.src = "";
   productPhotoData = "";
 }
 
 function renderProducts() {
-  const body = document.getElementById("products-body");
+  const body = document.getElementById("product-body");
   body.innerHTML = "";
 
   state.products.forEach((product) => {
@@ -638,14 +646,14 @@ function renderProducts() {
     btn.addEventListener("click",()=>{
       const product = state.products.find((p) => p.id === btn.dataset.edit);
       if (!product) return;
-      document.getElementById("products-id").value = product.id;
-      document.getElementById("products-name").value = product.name;
-      document.getElementById("products-category").value = product.category;
-      document.getElementById("products-price").value = Number(product.price).toFixed(2);
-      document.getElementById("products-cost").value = Number(product.cost).toFixed(2);
-      document.getElementById("products-margin").value = `${Number(product.margin).toFixed(2)}%`;
+      document.getElementById("product-id").value = product.id;
+      document.getElementById("product-name").value = product.name;
+      document.getElementById("product-category").value = product.category;
+      document.getElementById("product-price").value = Number(product.price).toFixed(2);
+      document.getElementById("product-cost").value = Number(product.cost).toFixed(2);
+      document.getElementById("product-margin").value = `${Number(product.margin).toFixed(2)}%`;
       productPhotoData = product.photo || "";
-      const preview = document.getElementById("products-preview");
+      const preview = document.getElementById("product-preview");
       if (product.photo) {
         preview.src = product.photo;
         preview.classList.remove("hidden");
@@ -998,13 +1006,70 @@ function runBackup(reason = "automatico") {
   return snapshot;
 }
 
+// BACKUP NA NUVEM
+async function backupCloud() {
+
+  try {
+
+    await window.setDoc(
+      window.doc(window.db, "backup", "principal"),
+      {
+        state: state,
+        updatedAt: new Date().toISOString()
+      }
+    );
+
+    alert("Backup na nuvem realizado com sucesso!");
+
+  } catch (error) {
+
+    console.error(error);
+    alert("Erro ao salvar backup na nuvem");
+
+  }
+
+}
+
+// RESTAURAR BACKUP
+async function restoreCloud() {
+
+  try {
+
+    const docSnap = await window.getDoc(
+      window.doc(window.db, "backup", "principal")
+    );
+
+    if (docSnap.exists()) {
+
+      state = docSnap.data().state;
+
+      saveState();
+
+      alert("Backup restaurado!");
+
+      location.reload();
+
+    } else {
+
+      alert("Nenhum backup encontrado na nuvem");
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+    alert("Erro ao restaurar backup");
+
+  }
+
+}
 function bindSettings() {
   document.getElementById("save-settings").addEventListener("click", ()=>{
     state.settings.businessName = document.getElementById("settings-business-name").value.trim() || "Delicia Baiana";
     state.settings.theme = document.getElementById("settings-theme").value;
     setTheme(state.settings.theme);
     saveState();
-    notify("Configuracoes salvas.");
+    notify("settings salvas.");
   });
 
   document.getElementById("backup-now").addEventListener("click", ()=>{
@@ -1114,25 +1179,39 @@ function renderAll() {
   renderSettings();
 }
 
-function registerServiceWorker() {
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js").catch(() => {
-      // falha silenciosa para nao bloquear o uso
-    });
-  }
-}
-
 function startAutoBackup() {
   const everyMs = Math.max(Number(state.settings.autoBackupMinutes || 5), 1) * 60 * 1000;
   setInterval(() => {
     runBackup("automatico");
   }, everyMs);
 }
+let sideMenu;
+let menuOverlay;
 
 function init(){
+
+  sideMenu = document.getElementById("sideMenu");
+  menuOverlay = document.getElementById("menuOverlay");
+
+  const menuBtn = document.getElementById("menuBtn");
+  const closeMenu = document.getElementById("closeMenu");
+
+  function abrirMenu(){
+    sideMenu.classList.add("open");
+    menuOverlay.classList.add("active");
+  }
+
+  function fecharMenu(){
+    sideMenu.classList.remove("open");
+    menuOverlay.classList.remove("active");
+  }
+
+if(menuBtn) menuBtn.addEventListener("click", abrirMenu);
+if(closeMenu) closeMenu.addEventListener("click", fecharMenu);
+if(menuOverlay) menuOverlay.addEventListener("click", fecharMenu);
+
   bindAuth();
-  bindNavigation();
-  bindPDV();
+  bindPedidos();
   bindCashflow();
   bindProducts();
   bindReports();
